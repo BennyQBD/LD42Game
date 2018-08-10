@@ -1,0 +1,122 @@
+
+
+- Stage 1 is the Dark Lord flying through his castle and killing various nuisances that took residence, culminating in a battle with a leprechaun who stole his gold
+
+
+- Maybe focused shot is elemental, element can change with pickups, and does more or less damage on certain enemies? Interesting but it seems like this would essentially become "acquire element boss is weak to before the boss"
+
+Enemy Types:
+- Bat
+- Robin the Leprechaun (Stage 1 Boss. Female Leprechaun? I kind of like that idea since Leprechauns are typically male. Stealing stuff from Dark Lord Saul's castle to keep up the pot of gold at the end of the rainbow)
+- Beast of Bladenboro (Cryptid from NC, type of cat that killed dogs by crushing or decapitating them. "about four and a half feet long, bushy, and resembling either a bear or a panther")
+	- Crush attacks where various walls of bullets close in on the player at various angles
+	- "Guilliotine" spell
+	- A non spell with the cat "shaking" like a wet dog and bouncing all over the screen, sending random particles of dander that the player must avoid. 
+	- Final attack: "Nine Lives," makes 9 clones of himself, all of which take damage so it dies quickly, but it's deadly because all 9 are attacking the player at once.
+	- Shows up citing an incident where all the dogs from a local village keep getting killed (hint: he's responsible)
+	- After player defeats this boss, a witness appears and claims the player is evil because he's "kicking cute animals." Claims the player is the one behind the animal killings
+	- The theme song for this is called "The cat's out of the bag"
+- Party of 3 adventurers (Stage 3 boss)
+- Strongest Warrior of All (Stage 4 boss, actually cute little girl)
+	- After first defeat, maybe the mother is the new stage 4 boss. Same attacks, but maybe slightly different?
+	- Possibly a Chinese girl, akin to a young Mulan or something?
+	- Rumored to have mystical power to drain their opponents will to fight (actually just the girl being cute)
+	- Saul, in his shock at seeing a small girl as the strongest warrior exclaims "But... a cute little girl is the strongest warrior?" She responds, with a cute half-embarassed grin "Awww thanks, mister! You're not too bad yourself. I could almost give you a hug." Saul instantly loses his composure and says "A... a hug??" (with hug music playing)
+	- She says something like "Actually... I don't really like fighting all that much. I only do it because it's the only thing that makes the bad guys go away. And when the bad guys have gone away, then I can play with my friends!"
+	- When defeated, she says "You're... not going to kill me are you? Please don't kill me mister. I'm not ready to die yet." Saul has a manic look and speech about the power of her saul, but says "...No. I can't do it." Then gives speech about how young girls shouldn't have to fight and she shouldn't fight any more. She should go play with her friends, because he's on his way to remove the bad guys once and for all. She is thankful at first. Then just before the scene ends she says "Hey mister? If you only fight the bad guys, then why did you fight me?" Saul doesn't have an answer.
+
+Story idea:
+- All in-game events are canon, even deaths and retries. Story changes based on what the player does and how much they die, etc.
+- Take as many fantasy tropes as possible, and deliberately play against them
+
+On death:
+- Taken to some sort of person who manages the dead
+- Told they aren't supposed to be dead yet. They can either view what was supposed to happen (continue) or just head back home (return to main menu)
+- Unlocks practice mode: Player can freely visit the dead manager to practice certain stages
+
+
+Music:
+- Stage 1 Theme: "Saul's Organic Castle"
+- Stage 2 Boss: "The Cat's Out of the Bag"
+- Song When Dead: "Death Management" (NOTE: This saves place and picks up where it left off the next time the player comes there. Either that, or picks a random bar to start on every time.)
+- Stage 4 Boss: "Ultimate Warrior" (Maybe. I'd like a better name.)
+- Final Stage Theme: ???
+- Final Boss Music: "Eternal Duel of Yin and Yang" (Maybe?)
+- The hug song thing: ???
+
+Fun ideas:
+- The first time a player dies at a boss, when they meet that boss again (maybe on the third meet), the boss has their body and shows them as "WTF how are you not dead?" proof.
+- Every time a player dies after continuing, the continue ghost comes to where the player is. Keep having more and more continue ghosts show up as the player dies more and more.
+- After enough continue ghosts show up, some other dead dude sees them and is like "WTF is going on?"
+- Sometimes after continuing, the dead manager person isn't there because they're managing some other dead and the player is like "What??"
+- If the player has reseen the first boss a certain number of times and it's been a certain amount of real-life time since the last encounter, the boss freaks out on seeing the player because he thought the player was finally gone for good.
+- A Wizard who must perform complex rituals to cast spells, all of which make him/her look like an absolute buffoon. "Do a pirouette into a handstand and point your pinky toe at the target to encase them in ice."
+- Dark Lord Saul goes on an epic quest to get a hug.
+- Quest for hug ends with Dark Lord Saul meeting a dog who doesn't judge him like everyone else. Ends with a scene of Dark Lord Saul and the dog happily cuddling.
+- The protagonist is the "evil" Dark Lord, who is actually a bit of a lovable buffoon. He is on a quest to find and defeat the band of "good" adventurers, because their "good" deeds actually cause a huge amount of collateral damage and are a big nuisance.
+- Leprechaun that steals gold from the Dark Lord to put under the rainbow
+- One of the adventurers is a wizard who's stumbled upon a strange realm where all terrible and cheesy humor goes to die. He calls it the "Forbidden Pun Zone" and he uses those jokes to torment his enemies.
+- When people die, they go to an area called the "Death Management Venue" (aka "DMV") where they must wait in line to receive a ticket, and then wait to be called on to move into the afterlife. Upon receiving his ticket for the first time, Dark Lord Saul thinks to himself "(My god... I'm in hell!)"
+- The Stage 3 boss doesn't actually fight the player, it is solved through diplomacy
+- The final boss, just before the battle begins says "Many beings save their deadliest powers for last, hoping to conserve energy or something. I don't believe in such nonsense. Die."
+- A boss that deliberately tries to avoid the player's fire. Player can use that to misdirect an otherwise very difficult attack.
+- Unlock something from beating the extra stage, possibly another playable character?
+- Character that uses some tool or machine to fight, Dr. Wily style?
+- Bar to show quantity of stuff rather than just text
+- Bar changes color when empty, so player can see in their peripheral vision if they're out of a resource
+- It's important to neither give too few nor too many resources in the game. I definitely want the middle route on that parameter.
+- Stage 1 needs to be relatively easy. Give a reasonable number of bullets, but make it fairly easy to dodge them. Even people who have no idea what they're doing should make it to the first boss with minimal problems. First boss should require basic competance at the controls to beat, but shouldn't be terribly challenging. For more experienced player, there needs to be a secondary challenge to do well in this stage to make the coming stages easier. What exactly they need to do to "do well" is yet to be decided, but something about gathering power, score, and resources presumably. Note that getting these shouldn't necessarily be easy for newer players, but shouldn't be overly difficult either.
+- Different Extra Difficulties: Must beat the game on the respective difficulty to unlock the extra difficulty (Possible exception: Beating lower extra stage unlocks next higher?)
+- Winning the extra stage gets the ending that truly resolves the story.
+- Main menu is a map of the area, cursor moves to different areas the player can select to go to. Namely, illustration of stage areas (which player can select to practice them, or maybe even go there and do something?), and illustration of the location of the Death Management Venue where the player can engage in "spell practice." Remember, only unlock any form of practice after game overing at least once.
+- Extend concept of spell practice so player can practice any part of any stage and/or boss?
+- Difficulty should be a "fun" difficulty. No matter how challenging something is, it must feel like there's a way to overcome it. It must feel like the player's lack of knowledge and/or skill is causing them to fail, not the game putting the player in a stupid or impossible situation.
+- Attack patterns need to look good! Yes, it needs to be fun, but aesthetics are really important
+- Death animation is player shattering?
+- Mini "difficulty cycles" in level design where things gradually get harder before getting a "breather" that's much easier, and difficulty slowly builds again or something?
+- "Power" is actually souls collected by the Dark Lord Saul to feed his dark magic power.
+- Dark Lord Saul calls himself the "Dark Danmaku Overlord"
+- Plot significance to difficulty settings: Dark Lord Saul potentially uses some magic thingymawhatsit to somehow make the path ahead easier, but at some cost in plot value. Hence why must clear on higher difficulties for the best ending.
+- Bosses have a "Level" that equates to the number of spells they have. It decreases as they are fought until they die.
+- Spatial Distortion HOM Effect: Instead of clearing the screen every frame, dim it by a certain amount to produce a slight train/HOM effect.
+- Deck of cards attack, so cards pile up like a deck graphically
+- Boss that throws wrenches?
+- No "true" cap on power, but after a certain amount (i.e. 2.0) it exponentially decreases over time. Past a certain "desired max" (i.e. 4.0), it's in "Overdrive" mode and decreases especially quickly.
+- Doom-style help and stage transition menus.
+- Boss that is 3 characters in the healer/tank/DPS type-roles
+- Boss that spawns minions that do the actual attack. Player must kill minions to prevent being overwhelmed.
+- Patterns designed to be like demoscene patterns
+- Pattern that's supposed to look like an explosion
+- "The Wizard of Passing Wind" - "I may love my puns, but I'm no joke."
+- No bullets allowed to come from offscreen!
+- Different shot types correspond to the four elements?
+- Stage sections have bonuses for certain things i.e. bonus for pacifist?
+- Secrets! Esp. Secret levels!
+- Different shot types as pickups, possibly allow switching between them like Doom?
+- Power up items, sort of like Doom and/or ISC
+- Normal enemy that has a decent healthbar and pursues the player, so their attacks get progressively harder to dodge if the player isn't killing them.
+- Enemy that can be stunned when hit to make it shoot less.
+- Score is like experience points, leveling up the player. The player can (optionally!) use certain perks at each level to make the game easier, at the cost of a score penalty.
+- Multiple routes for every stage, including hidden routes?
+- Routes "designed" ala Star Wars: The Chibi Rebellion Doom Mod? Possibly as optional bonus stages with double score and possibility to get special items
+
+Saul Quips:
+- *context: during quest for hug, is accused of being creepy and having sexual motives* 
+
+
+Trope Twist Brainstorm (on second thought, maybe tone this down a bit. I'm not a huge fan of these tbh):
+- Undesired prince (as opposed to the prince the woman always wants) (The "Princel")
+- The Chosen One (how to play on this somehow?)Reversal
+- Something on the trope of a prophecy
+- The Empire is NOT evil, but in fact the good guys
+- The guy who dresses up with all the stereotypical evil stuff is actually the good guy and vice-versa
+- The big, powerful king and wizard are good. The poor, unfortunate farm boy is evil.
+
+"The fastest way to my heart is a world where the "fantasy" is turned up to 11. Majestic floating islands with endless waterfalls. Colorful crystal / mushroom caves. Bizarre ancient ruins with cool faded murals and statues depicting a weird extinct race. Yes, I like my fantasy to be utterly fantastic. I want to be surprised and enamored by every little description of the wilderness, of architecture, and culture. A book with a world like this better be about a character who's a wanderlust, or at the least has a damn good reason for exploring all over. I'm equally fine with books taking place in and around one location, but it better be a really cool location."
+
+
+
+What do I really like about Touhou's lore?
+- Land connected to many well-known but mysterious places like the Netherworld and such.
+- Populated by mystical but not-sterotypical beings
+- Clear and simple purpose for the protagonist that integrates with the setting and allows the various plots
