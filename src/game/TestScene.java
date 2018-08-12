@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Random;
 import java.util.List;
+import java.util.ArrayList;
 
 import game.components.*;
 import engine.audio.IAudioDevice;
@@ -60,6 +61,8 @@ public class TestScene extends Scene {
 	private SpriteSheet font;
 	private SpriteSheet primarySheet;
 	private Collectables collectables = new Collectables();
+	private IButton continueButton = null;
+	private EntityFactory entityFactory;
 	
 	private AABB screenArea;
 
@@ -128,549 +131,91 @@ public class TestScene extends Scene {
 				new TextureFactory(device, "./res/"));
 		primarySheet = sprites.get("spriteSheet.png", 16, 16, 0,
 				IRenderDevice.FILTER_LINEAR);
+		entityFactory = new EntityFactory(getStructure(), screenArea, primarySheet, primarySheet, collectables, device);
+		continueButton = new KeyButton(input, new int[] { IInput.KEY_C });
 
 		font = sprites.get("monospace.png", 16, 16, 1,
 				IRenderDevice.FILTER_LINEAR);
 
 		double screenCenterX = (-1+rightWallX)/2.0;
-		Entity e2 = createPlayer(screenCenterX, -1, 3.0, 1.0, 0.1, 1.0, 0.1, 0.99, 1.0, new IEntityMaker() {
-			@Override
-			public Entity makeEntity(Entity entity, double[] params) {
-				double slowDownAmt = params[1];
-				Color playerShotColor = new Color(Util.lerp(0.0, 1.0, params[2]), 1.0, 1.0);
-				//playerShotColor.set(CMWC4096.random(), CMWC4096.random(), CMWC4096.random(), 1.0);//1-params[2], 1.0);
-				IEntityMaker shotMaker = new IEntityMaker() {
-					@Override
-					public Entity makeEntity(Entity entity, double[] params) {
-						Entity e = new Entity(getStructure(), entity.getX()+params[0], entity.getY()+params[1], 0);
-						new ProjectileComponent(e,params[2], 1.0, 0, 2.0, 0, 0, 0.5, 2.0, screenArea);
-//							entities.createProjectile(entity.getX()+params[0], entity.getY()+params[1], params[2], 1.0, 0, 2.0, 0, 0, 0.5, 2.0);
-						new ColliderComponent(e);
-						new SpriteComponent(e, 0.03, 0.03, primarySheet, 0, playerShotColor).setTransparency(0.5);
-						new InvalidAreaRemove(e, new AABB(-1, -1, rightWallX, 1));
-						new HittableComponent(e, HittableComponent.TYPE_ENEMY_HAZARD, 5.0-slowDownAmt);
-						return e;
-					}
-				};
-				double shotXSpread = 0.05;
-				double shotYSpread = 0.05;
-				double shotXVel = 0.1;
-				if(params[1] == 1.0) {
-					shotXSpread /= 2.0;
-					shotXVel /= 4.0;
-					shotYSpread -= 0.1;
-				}
-				if(params[0] < 1.0) {
-					shotMaker.makeEntity(entity, new double[] {+shotXSpread*3.0/5.0, 0, 0});
-					return shotMaker.makeEntity(entity, new double[] {-shotXSpread*3.0/5.0, 0, 0});
-				} else if(params[0] < 2.0) {
-					shotMaker.makeEntity(entity, new double[] {+shotXSpread, -shotYSpread, -shotXVel});
-					shotMaker.makeEntity(entity, new double[] {-shotXSpread, -shotYSpread, +shotXVel});
-					return shotMaker.makeEntity(entity, new double[] {0.0, 0.0, 0});
-				} else if(params[0] < 3.0) {
-					shotMaker.makeEntity(entity, new double[] {+shotXSpread, -shotYSpread/2.0, +shotXVel});
-					shotMaker.makeEntity(entity, new double[] {-shotXSpread, -shotYSpread/2.0, -shotXVel});
-					shotMaker.makeEntity(entity, new double[] {+shotXSpread, -shotYSpread, -shotXVel});
-					shotMaker.makeEntity(entity, new double[] {-shotXSpread, -shotYSpread, +shotXVel});
-					return shotMaker.makeEntity(entity, new double[] {0.0, 0.0, 0});
-				} else if(params[0] < 4.0) {
-					shotMaker.makeEntity(entity, new double[] {+shotXSpread, -shotYSpread/2, +shotXVel/1.5});
-					shotMaker.makeEntity(entity, new double[] {-shotXSpread, -shotYSpread/2, -shotXVel/1.5});
-
-					shotMaker.makeEntity(entity, new double[] {+shotXSpread, -shotYSpread, +shotXVel*1.5});
-					shotMaker.makeEntity(entity, new double[] {-shotXSpread, -shotYSpread, -shotXVel*1.5});
-					shotMaker.makeEntity(entity, new double[] {+shotXSpread, -shotYSpread, -shotXVel});
-					shotMaker.makeEntity(entity, new double[] {-shotXSpread, -shotYSpread, +shotXVel});
-					return shotMaker.makeEntity(entity, new double[] {0.0, 0.0, 0});
-				} else {
-					shotMaker.makeEntity(entity, new double[] {+shotXSpread, -shotYSpread/3, +shotXVel/2});
-					shotMaker.makeEntity(entity, new double[] {-shotXSpread, -shotYSpread/3, -shotXVel/2});
-					shotMaker.makeEntity(entity, new double[] {+shotXSpread, -shotYSpread/2, +shotXVel});
-					shotMaker.makeEntity(entity, new double[] {-shotXSpread, -shotYSpread/2, -shotXVel});
-
-					shotMaker.makeEntity(entity, new double[] {+shotXSpread, -shotYSpread, +shotXVel*2});
-					shotMaker.makeEntity(entity, new double[] {-shotXSpread, -shotYSpread, -shotXVel*2});
-					shotMaker.makeEntity(entity, new double[] {+shotXSpread, -shotYSpread, -shotXVel});
-					shotMaker.makeEntity(entity, new double[] {-shotXSpread, -shotYSpread, +shotXVel});
-//						shotMaker.makeEntity(entities, entity, new double[] {+shotXSpread, -shotYSpread/3, +shotXVel/2});
-//						shotMaker.makeEntity(entities, entity, new double[] {-shotXSpread, -shotYSpread/3, -shotXVel/2});
-//
-//						shotMaker.makeEntity(entities, entity, new double[] {+shotXSpread, -shotYSpread/2, +shotXVel*2});
-//						shotMaker.makeEntity(entities, entity, new double[] {-shotXSpread, -shotYSpread/2, -shotXVel*2});
-//						shotMaker.makeEntity(entities, entity, new double[] {+shotXSpread, -shotYSpread, -shotXVel/1.5});
-//						shotMaker.makeEntity(entities, entity, new double[] {-shotXSpread, -shotYSpread, +shotXVel/1.5});
-//						shotMaker.makeEntity(entities, entity, new double[] {+shotXSpread, -shotYSpread, -shotXVel*1.5});
-//						shotMaker.makeEntity(entities, entity, new double[] {-shotXSpread, -shotYSpread, +shotXVel*1.5});
-					return shotMaker.makeEntity(entity, new double[] {0.0, 0.0, 0});
-
-				}
-
-				//return null;
-			}
-		}, input, primarySheet);
+		Entity e2 = createPlayer(screenCenterX, -1, 3.0, 1.0, 0.1, 1.0, 0.1, 0.99, 1.0, entityFactory.playerShot, input, primarySheet);
+		entityFactory.setPlayer(e2);
 		createOuterWall(rightWallX);
 		createSidePanel(rightWallX, primarySheet);
-		LightMap bulletLight = new LightMap(device, 16, new Color(1.0, 0.8, 0.8));
-		IEntityComponentAdder standardBullet = new IEntityComponentAdder() {
-			@Override
-			public void addToEntity(Entity e) {
-				ColliderComponent c = new ColliderComponent(e);
-				new HittableComponent(e,1);
-				new SpriteComponent(e, 0.02, 0.02, primarySheet, 0, Color.WHITE);
-//				if(bulletLight != null) {
-//					new LightComponent(e, bulletLight, 0.08, 0.08, 0, 0);
-//				}
-
-			}
-		};
-		IEntityMaker basicEnemy1 = new IEntityMaker() {
-			@Override
-			public Entity makeEntity(Entity entity, double[] params) {
-				Entity e = new Entity(getStructure(), params[0], params[1], 0);
-				new ProjectileComponent(e,params[2], params[3], 0, 0, params[4], 0, 0.5, 2.0, screenArea);
-//					entities.createProjectile(params[0], params[1], params[2], params[3], 0, 0, params[4], 0, 0.5, 2.0);
-				new ColliderComponent(e);
-				new SpriteComponent(e, 0.05, 0.05, primarySheet, 2, Color.WHITE);
-				new BulletSpawner(e, 0, -1, params[5],
-								new BulletSpawnProperties(0.5, 0, 0, 0, 0, 0, primarySheet),
-								new BulletSpawnVariance(0,1.0,0,0,0,0,0,0), standardBullet, screenArea);
-				new BulletSpawnerAimer(e,e2);
-				new EnemyComponent(e, collectables, 10.0, new IEntityMaker() {
-					@Override
-					public Entity makeEntity(Entity entity, double[] params) {
-						Entity e = new Entity(getStructure(), entity.getX(), entity.getY(), 0);
-						new ProjectileComponent(e, CMWC4096.random(-0.2, 0.2), CMWC4096.random(0.1, 0.3), 0, -0.4, 0, 0, 0.5, 2.0, screenArea);
-//							entities.createProjectile(entity.getX(), entity.getY(), 0, 0.2, 0, -0.4, 0, 0, 0.5, 2.0);
-						double scale = CMWC4096.random(0.01, 0.02);
-						new SpriteComponent(e, scale, scale, primarySheet, 2, Color.WHITE);
-						new CollectableComponent(e, 0, scale);
-						new HittableComponent(e, HittableComponent.TYPE_COLLECTABLE);
-						return e;
-					}
-				}, null, 4);
-				new InvalidAreaRemove(e, new AABB(-1, -1, rightWallX, 1));
-				return e;
-			}
-		};
+		
 		
 		Entity e = new Entity(getStructure(), 0, 0, 0);
-		int numEnemies = 8;
-		new DelayedSpawn(e, 0.0, basicEnemy1, new double[] { rightWallX, 1.1, -0.3, -0.35, -0.1, 1.5 }, numEnemies, 0.5);
-		new DelayedSpawn(e, 0.0, basicEnemy1, new double[] { -1, 1.1, 0.3, -0.35, 0.1, 1.5 }, numEnemies, 0.5);
+		int numEnemies = 4;
+		double startSpawnDelay = -135.0;
+		// INTRO FOR LEVEL
+//		new DelayedSpawn(e, startSpawnDelay, entityFactory.basicEnemy, new double[] { rightWallX, 1.1, -0.3, -0.35, -0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
+//		new DelayedSpawn(e, startSpawnDelay, entityFactory.basicEnemy, new double[] { -1, 1.1, 0.3, -0.35, 0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
+//
+//		// SUDDEN INTENSITY 
+//		new DelayedSpawn(e, startSpawnDelay+10.0, entityFactory.basicEnemy2, new double[] { 0.5, 1.1, 0.0, -1.0, -0.2, 0.0, 0.5, 1.0, 0.0, 0, Math.PI*2.0, 8, 0.005, 10.0, 6 }, 4, 0.75);
+//		new DelayedSpawn(e, startSpawnDelay+10.0, entityFactory.basicEnemy2, new double[] { -0.5, 1.1, 0.0, -1.0, 0.2, 0.0, 0.5, 1.0, 0.0, 0, Math.PI*2.0, 8, 0.005, 10.0, 6 }, 4, 0.75);
+//
+//		new DelayedSpawn(e, startSpawnDelay+15.0, entityFactory.basicEnemy, new double[] { 0.75, 1.1, -0.3, -0.35, -0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
+//		new DelayedSpawn(e, startSpawnDelay+15.0, entityFactory.basicEnemy, new double[] { -0.75, 1.1, 0.3, -0.35, 0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
+//		new DelayedSpawn(e, startSpawnDelay+15.0, entityFactory.basicEnemy, new double[] { 1, -0.8, -0.5, 0.6, -0.15, 0.0, 0.5, 0.9, 1.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 4, 1.5);
+//		new DelayedSpawn(e, startSpawnDelay+15.0, entityFactory.basicEnemy, new double[] { -1, -0.8, 0.5, 0.6, 0.15, 0.0, 0.5, 0.9, 1.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 4, 1.5);
+//
+//		new DelayedSpawn(e, startSpawnDelay+23.0, entityFactory.basicEnemy2, new double[] { 0.75, 1.1, -0.3, -0.35, -0.3, 0.2, 0.5, 1.6, 1.0, -0.25, 0.25, 3, 0.0125, 50.0, 10 }, 4, 1.5);
+//		new DelayedSpawn(e, startSpawnDelay+23.0, entityFactory.basicEnemy2, new double[] { -0.75, 1.1, 0.3, -0.35, 0.3, -0.2, 0.5, 1.6, 1.0, -0.25, 0.25, 3, 0.0125, 50.0, 10 }, 4, 1.5);
+//		new DelayedSpawn(e, startSpawnDelay+23.0, entityFactory.basicEnemy2, new double[] { 1.1, 0.75, -1.0, 0.0, 0.6, -0.6, 0.75, 1.2, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 6, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+23.0, entityFactory.basicEnemy2, new double[] { -1.1, 0.75, 1.0, 0.0, -0.6, 0.6, 0.75, 1.2, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 6, 1.0);
+//
+//		// INTRO FOR BLACK/WHITE HOLES
+//		new DelayedSpawn(e, startSpawnDelay+33.0, entityFactory.blackHoleEnemy, new double[] { 1, -0.5, -0.3, 0.35, -0.1, 0.0, 0.25, 1.3, 1.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 4, 3.0);
+//		new DelayedSpawn(e, startSpawnDelay+33.0, entityFactory.whiteHoleEnemy, new double[] { -1, -0.5, 0.3, 0.35, 0.1, 0.0, 0.25, 1.3, 1.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 4, 3.0);
+//
+//		new DelayedSpawn(e, startSpawnDelay+45.0, entityFactory.blackHoleEnemy, new double[] { 1, -0.25, -0.2, 0.5, 0.24, 0.0, 0.25, 4.0, 2.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 6, 2.0);
+//		new DelayedSpawn(e, startSpawnDelay+46.0, entityFactory.whiteHoleEnemy, new double[] { 1, -0.25, -0.2, 0.5, 0.24, 0.0, 0.25, 4.0, 2.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 6, 2.0);
+//		new DelayedSpawn(e, startSpawnDelay+45.0, entityFactory.blackHoleEnemy, new double[] { -1, -0.25, 0.2, 0.5, -0.24, 0.0, 0.25, 4.0, 2.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 6, 2.0);
+//		new DelayedSpawn(e, startSpawnDelay+46.0, entityFactory.whiteHoleEnemy, new double[] { -1, -0.25, 0.2, 0.5, -0.24, 0.0, 0.25, 4.0, 2.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 6, 2.0);
+//		new DelayedSpawn(e, startSpawnDelay+45.0, entityFactory.basicEnemy, new double[] { 1, -0.5, -0.3, 0.35, -0.1, 0.0, 0.5, 1.5, 1.0, -0.5, 0.5, 4, 0.005, 10.0, 4 }, 6, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+46.0, entityFactory.basicEnemy, new double[] { -1, -0.5, 0.3, 0.35, 0.1, 0.0, 0.5, 1.5, 1.0, -0.5, 0.5, 4, 0.005, 10.0, 4 }, 6, 1.0);
+//
+//		new DelayedSpawn(e, startSpawnDelay+59.0, entityFactory.basicEnemy2, new double[] { 1.1, 0.75, -1.0, 0.0, 0.6, -0.0, 0.75, 1.2, 1.0, -0.25, 0.25, 1, 0.005, 20.0, 5 }, 8, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+59.0, entityFactory.basicEnemy2, new double[] { -1.1, 0.75, 1.0, 0.0, -0.6, 0.0, 0.75, 1.2, 1.0, -0.25, 0.25, 1, 0.005, 20.0, 5 }, 8, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+62.0, entityFactory.basicEnemy2, new double[] { 0.9, 1.1, -0.45, -0.45, -0.2, -0.0, 0.5, 1.2, 1.0, -0.25, 0.25, 1, 0.0075, 30.0, 6 }, 8, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+62.0, entityFactory.basicEnemy2, new double[] { -0.9, 1.1, 0.45, -0.45, 0.2, 0.0, 0.5, 1.2, 1.0, -0.25, 0.25, 1, 0.0075, 30.0, 6 }, 8, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+65.0, entityFactory.basicEnemy2, new double[] { 1.0, 0.9, -0.4, -0.0, -0.0, -0.0, 0.25, 1.2, 1.0, -0.4, 0.4, 7, 0.015, 60.0, 8}, 8, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+65.0, entityFactory.basicEnemy2, new double[] { -1.0, 0.9, 0.4, -0.0, 0.0, 0.0, 0.25, 1.2, 1.0, -0.4, 0.4, 7, 0.015, 60.0, 8 }, 8, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+70.0, entityFactory.blackHoleEnemy, new double[] { 1.0, -0.9, -0.4, 0.3, -0.0, -0.0, 0.125, 1.2, 1.0, -0.25, 0.25, 1, 0.015, 60.0, 4 }, 8, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+70.0, entityFactory.whiteHoleEnemy, new double[] { -1.0, -0.9, 0.4, 0.3, 0.0, 0.0, 0.125, 1.2, 1.0, -0.25, 0.25, 1, 0.015, 60.0, 4 }, 8, 1.0);
+//
+//		new DelayedSpawn(e, startSpawnDelay+84.0, entityFactory.basicEnemy2, new double[] { 1, 0.9, -0.3, -0.1, -0.04, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 35.0, 7 }, 8, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+84.0, entityFactory.basicEnemy2, new double[] { -1, 0.9, 0.3, -0.1, 0.04, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 35.0, 7 }, 8, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+84.0, entityFactory.basicEnemy2, new double[] { 1, 0.7, -0.3, 0.1, 0.04, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 35.0, 7 }, 8, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+84.0, entityFactory.basicEnemy2, new double[] { -1, 0.7, 0.3, 0.1, -0.04, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 35.0, 7 }, 8, 1.0);
+//
+//		new DelayedSpawn(e, startSpawnDelay+83.0, entityFactory.seekingEnemy, new double[] { 1.0, 0.9, -0.15, 0.075, -0.0, -0.0, 0.38, 2.0, 1.0, -0.35, 0.35, 3, 0.025, 120.0, 16 }, 1, 3.0);
+//		new DelayedSpawn(e, startSpawnDelay+83.0, entityFactory.seekingEnemy, new double[] { -1.0, 0.9, 0.15, 0.075, 0.0, 0.0, 0.38, 2.0, 1.0, -0.35, 0.35, 3, 0.025, 120.0, 16 }, 1, 3.0);
+//		new DelayedSpawn(e, startSpawnDelay+86.0, entityFactory.seekingEnemy, new double[] { 1.0, 0.4, -0.15, 0.075, -0.0, -0.0, 0.38, 2.0, 1.0, -0.35, 0.35, 3, 0.025, 120.0, 16 }, 1, 3.0);
+//		new DelayedSpawn(e, startSpawnDelay+86.0, entityFactory.seekingEnemy, new double[] { -1.0, 0.4, 0.15, 0.075, 0.0, 0.0, 0.38, 2.0, 1.0, -0.35, 0.35, 3, 0.025, 120.0, 16 }, 1, 3.0);
+//
+//		new DelayedSpawn(e, startSpawnDelay+96.0, entityFactory.seekingEnemy, new double[] { 1.0, -0.9, -0.15, 0.075, -0.0, -0.0, 0.25, 1.2, 1.0, -0.25, 0.25, 3, 0.025, 120.0, 16 }, 2, 3.0);
+//		new DelayedSpawn(e, startSpawnDelay+96.0, entityFactory.seekingEnemy, new double[] { -1.0, -0.9, 0.15, 0.075, 0.0, 0.0, 0.25, 1.2, 1.0, -0.25, 0.25, 3, 0.025, 120.0, 16 }, 2, 3.0);
+//		new DelayedSpawn(e, startSpawnDelay+98.0, entityFactory.basicEnemy2, new double[] { 1.0, 0.9, -0.4, -0.1, -0.0, -0.0, 0.5, 1.2, 1.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
+//		new DelayedSpawn(e, startSpawnDelay+98.0, entityFactory.basicEnemy2, new double[] { -1.0, 0.9, 0.4, -0.1, 0.0, 0.0, 0.5, 1.2, 1.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
+//		new DelayedSpawn(e, startSpawnDelay+105.0, entityFactory.blackHoleEnemy, new double[] { 1.0, 0.9, -0.4, 0.0, -0.0, -0.0, 0.15, 6.0, 2.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
+//		new DelayedSpawn(e, startSpawnDelay+105.0, entityFactory.blackHoleEnemy, new double[] { -1.0, 0.9, 0.4, 0.0, 0.0, 0.0, 0.15, 6.0, 2.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
+//		new DelayedSpawn(e, startSpawnDelay+105.0, entityFactory.whiteHoleEnemy, new double[] { 1.0, -0.9, -0.4, 0.0, -0.0, -0.0, 0.15, 6.0, 2.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
+//		new DelayedSpawn(e, startSpawnDelay+105.0, entityFactory.whiteHoleEnemy, new double[] { -1.0, -0.9, 0.4, 0.0, 0.0, 0.0, 0.15, 6.0, 2.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
 
-		IEntityComponentAdder bossBullet = new IEntityComponentAdder() {
-			Color bulletColor1 = new Color(1.0, 0.0, 1.0).hsvToRgb();
-			Color bulletColor2 = new Color(1.0, 0.0, 1.0).hsvToRgb();
-			boolean useColor1 = false;
-			int counter = 0;
-			@Override
-			public void addToEntity(Entity e) {
-				IEntityComponentAdder adder = this;
-				ColliderComponent c = new ColliderComponent(e);
-				new HittableComponent(e,1);
-				useColor1 = counter % 5 == 0;
-				new SpriteComponent(e, 0.02, 0.02, primarySheet, 0, useColor1 ? bulletColor1 : bulletColor2);
-				if(useColor1) {
-					new LightComponent(e, bulletLight, 0.08, 0.08, 0, 0);
-				}
-//				double delay = 1.0;
-//				new DelayedSpawn(e, delay, new IEntityMaker() {
-//					@Override
-//					public Entity makeEntity(Entity entity, double[] params) {
-//						Entity e = new Entity(getStructure(), params[params.length-1], params[params.length-2], 0);
-//						new BulletSpawner(e, 0, -1, 1.0,
-//								new BulletSpawnProperties(0.5, 0, 0, 0, 0, 0, primarySheet),
-//								new BulletSpawnVariance(0.0,0.0,0,0,0,0,0,0), standardBullet, screenArea);
-//						new BulletSpawnerAimer(e,e2);
-//						new DelayedRemove(e, 0.1);
-//						return e;
-//					}
-//				}, null);
-//				new DelayedRemove(e, delay);
-				useColor1 = !useColor1;
-				counter++;
-				//new Color(1.0, CMWC4096.random(), 1.0).hsvToRgb()
-//				if(bulletLight != null) {
-//					new LightComponent(e, bulletLight, 0.08, 0.08, 0, 0);
-//				}
+//		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { 0.5, 1.1, 0, -0.7, 0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { -0.5, 1.1, 0, -0.7, -0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { 1.1, 0.5, -0.7, 0, -0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
+//		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { -1.1, 0.5, 0.7, 0, 0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
 
-			}
-		};
-
-		IEntityComponentAdder zoomBullet = new IEntityComponentAdder() {
-			Color bulletColor1 = new Color(1.0, 0.0, 1.0).hsvToRgb();
-			Color bulletColor2 = new Color(1.0, 0.5, 1.0).hsvToRgb();
-			boolean useColor1 = false;
-			@Override
-			public void addToEntity(Entity e) {
-				IEntityComponentAdder adder = this;
-				ColliderComponent c = new ColliderComponent(e);
-				new HittableComponent(e,1);
-				new SpriteComponent(e, 0.02, 0.02, primarySheet, 0, useColor1 ? bulletColor1 : bulletColor2);
-				double delay = 1.0;
-				new DelayedSpawn(e, delay, new IEntityMaker() {
-					@Override
-					public Entity makeEntity(Entity entity, double[] params) {
-						Entity e = new Entity(getStructure(), params[params.length-1], params[params.length-2], 0);
-						new BulletSpawner(e, 0, -1, 1.0,
-								new BulletSpawnProperties(0.5, 0, 0, 0, 0, 0, primarySheet),
-								new BulletSpawnVariance(0.0,0.0,0,0,0,0,0,0), adder, screenArea);
-						new BulletSpawnerAimer(e,e2);
-						new DelayedRemove(e, 0.1);
-						return e;
-					}
-				}, null);
-				new FadeComponent(e, 0.0, 1.0, delay, 0.0);
-				new ScaleComponent(e, 5.0, 1.0, delay, 0.0);
-				new DelayedRemove(e, delay);
-				useColor1 = !useColor1;
-				//new Color(1.0, CMWC4096.random(), 1.0).hsvToRgb()
-//				if(bulletLight != null) {
-//					new LightComponent(e, bulletLight, 0.08, 0.08, 0, 0);
-//				}
-
-			}
-		};
+		new DelayedSpawn(e, startSpawnDelay+135.0, entityFactory.boss, new double[] {}, 1, 0.0);
 
 
-		makeBossEntity(e2, screenCenterX, primarySheet, bossBullet);
+//
+
+//		entityFactory.makeBossEntity(screenCenterX, entityFactory.bossBullet);
 //		AudioUtil.playBackgroundMusic("./res/music.mp3");
-	}
-
-	private Entity makeBossEntity(Entity e2, double screenCenterX, SpriteSheet sprites, IEntityComponentAdder bulletType) {
-		IEntityMaker circle1 = new IEntityMaker() {
-			@Override
-			public Entity makeEntity(Entity entity, double[] params) {
-				Entity e = new Entity(getStructure(), screenCenterX, 0, 0);
-				new DelayedRemove(e, params[0]);
-				new ClearHittableOnRemove(e, new AABB(-2,-2,2,2), HittableComponent.TYPE_HAZARD);
-				BulletSpawnVariance var = new BulletSpawnVariance(0.05,0,0.1,0.1,0,0,0,0);
-				double spawnSpeed = 0.2;
-				double sqrt2o2 = Math.sqrt(2.0)/8.0;
-				double perpAcc = -0.125;
-				double vel = 0.2;
-				double startAngle = 0;
-				double endAngle = Math.PI*2;
-				int numBullets = 30;
-				new BulletSpawner(e, 0, -1, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(vel, 0, 0, 0, 0, 0, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawnerAimer(e,e2);
-				return e;
-			}
-		};
-
-		IEntityMaker circle2 = new IEntityMaker() {
-			@Override
-			public Entity makeEntity(Entity entity, double[] params) {
-				Entity e = new Entity(getStructure(), screenCenterX, 0, 0);
-				new DelayedRemove(e, params[0]);
-				new ClearHittableOnRemove(e, new AABB(-2,-2,2,2), HittableComponent.TYPE_HAZARD);
-				BulletSpawnVariance var = new BulletSpawnVariance(0,0,0.1,0.1,0,0,0,0);
-				double spawnSpeed = 0.3;
-				double sqrt2o2 = Math.sqrt(2.0)/8.0;
-				double perpAcc = -0.125;
-				double vel = 0.2;
-				double startAngle = 0;
-				double endAngle = Math.PI*2;
-				int numBullets = 40;
-				new BulletSpawner(e, 0, -1, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(vel, 0, 0, 0, 0, 0, sprites),
-						var, bulletType, screenArea);
-				return e;
-			}
-		};
-
-		// NOTE: This attack doesn't scale past "Hard" mode. Need harder attack to replace it on higher difficulties. Above hard, replace with CrazyCircleSpiral?
-		IEntityMaker pinwheel = new IEntityMaker() {
-			@Override
-			public Entity makeEntity(Entity entity, double[] params) {
-				Entity e = new Entity(getStructure(), screenCenterX, 0, 0);
-				new DelayedRemove(e, params[0]);
-				new ClearHittableOnRemove(e, new AABB(-2,-2,2,2), HittableComponent.TYPE_HAZARD);
-				BulletSpawnVariance var = new BulletSpawnVariance(0,0,0,0,0,0,0,0);
-				double spawnSpeed =params[1] == 0.0 ? 0.4 : 0.2;
-				double sqrt2o2 = Math.sqrt(2.0)/8.0;
-				double perpAcc = -0.125;
-				double vel = 0.25;
-				double startAngle = 0;
-				double endAngle = Math.PI*2;
-				int numBullets = params[1] == 0.0 ? 2 : (params[1] <= 1.0 ? 4 : 8);
-				new BulletSpawner(e, 1, 0, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(vel, 0, -sqrt2o2, 0, 0, perpAcc, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, -1, 0, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(vel, 0, sqrt2o2, 0, 0, perpAcc, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, 0, -1, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(vel, 0, 0, sqrt2o2, 0, perpAcc, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, 0, 1, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(vel, 0, 0, -sqrt2o2, 0, perpAcc, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawnerAimer(e, createProjectile(screenCenterX, -0.25, 0.5, 0, 0, 0, 1, 0, 2, 0.5));	
-				return e;
-			}
-		};
-
-		IEntityMaker oldFourLeafClover = new IEntityMaker() {
-			@Override
-			public Entity makeEntity(Entity entity, double[] params) {
-				Entity e = new Entity(getStructure(), screenCenterX, 0, 0);
-				new DelayedRemove(e, params[0]);
-				new ClearHittableOnRemove(e, new AABB(-2,-2,2,2), HittableComponent.TYPE_HAZARD);
-				BulletSpawnVariance var = new BulletSpawnVariance(0,0,0,0,0,0,0,0);
-				double spawnSpeed = 0.1;
-				double sqrt2o2 = Math.sqrt(2.0)/2.0;
-				double startAngle = -0.4;
-				double endAngle = 0.4;
-				int numBullets = 4;
-				new BulletSpawner(e, 1, 0, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(0.5, 0, -sqrt2o2, 0, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, -1, 0, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(0.5, 0, sqrt2o2, 0, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, 0, -1, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(0.5, 0, 0, sqrt2o2, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, 0, 1, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(0.5, 0, 0, -sqrt2o2, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawnerAimer(e, createProjectile(screenCenterX, -0.25, 0.5, 0, 0, 0, 1, 0, 2, 0.5));
-				return e;
-			}
-		};
-
-		IEntityMaker crazyCircleSpiral = new IEntityMaker() {
-			@Override
-			public Entity makeEntity(Entity entity, double[] params) {
-				Entity e = new Entity(getStructure(), screenCenterX, 0, 0);
-				new DelayedRemove(e, params[0]);
-				new ClearHittableOnRemove(e, new AABB(-2,-2,2,2), HittableComponent.TYPE_HAZARD);
-				BulletSpawnVariance var = new BulletSpawnVariance(0,0,0,0,0,0,0,0);
-				double spawnSpeed = 0.4;
-				double sqrt2o2 = Math.sqrt(2.0)/2.0;
-				new BulletSpawner(e, 1, 1, spawnSpeed,
-						new BulletSpawnProperties(0.5, 0, -0.5, -0.5, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, -1, 1, spawnSpeed,
-						new BulletSpawnProperties(0.5, 0, 0.5, -0.5, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, -1, -1, spawnSpeed,
-						new BulletSpawnProperties(0.5, 0, 0.5, 0.5, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, 1, -1, spawnSpeed,
-						new BulletSpawnProperties(0.5, 0, -0.5, 0.5, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, 1, 0, spawnSpeed,
-						new BulletSpawnProperties(0.5, 0, -sqrt2o2, 0, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, -1, 0, spawnSpeed,
-						new BulletSpawnProperties(0.5, 0, sqrt2o2, 0, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, 0, -1, spawnSpeed,
-						new BulletSpawnProperties(0.5, 0, 0, sqrt2o2, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, 0, 1, spawnSpeed,
-						new BulletSpawnProperties(0.5, 0, 0, -sqrt2o2, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawnerAimer(e, createProjectile(screenCenterX, -0.25, -0.5, 0, 0, 0, -1, 0, 2, 0.5));
-				return e;
-			}
-		};
-
-		IEntityMaker fourLeafClover = new IEntityMaker() {
-			@Override
-			public Entity makeEntity(Entity entity, double[] params) {
-//				Entity e = new Entity(getStructure(), screenCenterX, -0.25, 0);
-//				new DelayedRemove(e, params[0]);
-//				new ClearHittableOnRemove(e, new AABB(-2,-2,2,2), HittableComponent.TYPE_HAZARD);
-//				BulletSpawnVariance var = new BulletSpawnVariance(0,0,0,0,0,0,1.0,0.01);
-//				double spawnSpeed = 0.1;
-//				double sqrt2o2 = Math.sqrt(2.0)/2.0;
-//				new BulletSpawner(e, -1, 0, spawnSpeed,
-//						new BulletSpawnProperties(0.5, 0, 0, 0, -1, 0, 2.0, 2, sprites),
-//						var);
-//				//double posX, double posY, double velX, double velY, double accX, double accY, double perpVel, double perpAcc, double despawnDelay, double speedCap
-//				//new BulletSpawnerAimer(e, createProjectile(screenCenterX, -0.25, -0.5, 0, 0, 0, -1, 0, 2, 0.5));
-//				return e;
-				Entity e = new Entity(getStructure(), screenCenterX, 0, 0);
-				new DelayedRemove(e, params[0]);
-				new ClearHittableOnRemove(e, new AABB(-2,-2,2,2), HittableComponent.TYPE_HAZARD);
-				BulletSpawnVariance var = new BulletSpawnVariance(0,0,0,0,0,0,0,0);
-				double spawnSpeed = params[1] <= 0.0 ? 0.2 : (params[1] <= 2.0 ? 0.1 : 0.075);
-				double speed = 0.4;
-				double speed2 = 0.4;
-				double sqrt2o2 = Math.sqrt(speed*speed*2);//Math.sqrt(2.0)/2.0;
-				double startAngle = -0.4;
-				double endAngle = 0.4;
-				int numBullets = params[1] <= 1.0 ? 1 : (params[1] <= 3.0 ? 2 : 3);
-				new BulletSpawner(e, sqrt2o2, sqrt2o2, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(speed2, 0, speed, speed, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, -sqrt2o2, sqrt2o2, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(speed2, 0, -speed, speed, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, sqrt2o2, -sqrt2o2, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(speed2, 0, speed, -speed, 0, -1, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, -sqrt2o2, -sqrt2o2, startAngle, endAngle, numBullets, spawnSpeed,
-						new BulletSpawnProperties(speed2, 0, -speed, -speed, 0, -1, sprites),
-						var, bulletType, screenArea);
-
-//				new BulletSpawner(e, -1, 0, startAngle, endAngle, numBullets, spawnSpeed,
-//						new BulletSpawnProperties(0.5, 0, sqrt2o2, 0, 0, -1, sprites),
-//						var);
-//				new BulletSpawner(e, 0, -1, startAngle, endAngle, numBullets, spawnSpeed,
-//						new BulletSpawnProperties(0.5, 0, 0, sqrt2o2, 0, -1, sprites),
-//						var);
-//				new BulletSpawner(e, 0, 1, startAngle, endAngle, numBullets, spawnSpeed,
-//						new BulletSpawnProperties(0.5, 0, 0, -sqrt2o2, 0, -1, sprites),
-//						var);
-				new BulletSpawnerAimer(e, createProjectile(screenCenterX, -0.25, 0.5, 0, 0, 0, 1, 0, 2, 0.5));
-				return e;
-
-			}
-		};
-
-		IEntityMaker circle3 = new IEntityMaker() {
-			@Override
-			public Entity makeEntity(Entity entity, double[] params) {
-				Entity e = new Entity(getStructure(), screenCenterX, 0, 0);
-				new DelayedRemove(e, params[0]);
-				new ClearHittableOnRemove(e, new AABB(-2,-2,2,2), HittableComponent.TYPE_HAZARD);
-				BulletSpawnVariance var = new BulletSpawnVariance(0,0,0,0,0.1,0,0.04,0.004);
-				double spawnSpeed = 1.2;
-				double sqrt2o2 = Math.sqrt(2.0)/8.0;
-				double perpAcc = -0.125;
-				double vel = 0.2;
-				double acc = -0.025;
-				double startAngle = 0;
-				double endAngle = Math.PI*2;
-				int numBullets = 20;
-				new BulletSpawner(e, 0, -1, startAngle, endAngle, numBullets, spawnSpeed, 0.0,
-						new BulletSpawnProperties(vel/1.2, acc, 0, 0, 0.1, -0.01, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, 0, -1, startAngle, endAngle, numBullets, spawnSpeed, 0.0,//spawnSpeed/4.0,
-						new BulletSpawnProperties(vel*1.2, acc, 0, 0, -0.1, 0.01, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, 0, -1, startAngle, endAngle, numBullets, spawnSpeed, 0.0,
-						new BulletSpawnProperties(vel, acc, 0, 0, 0, 0, sprites),
-						var, bulletType, screenArea);
-				return e;
-			}
-		};
-
-		
-		IEntityMaker circle4 = new IEntityMaker() {
-			@Override
-			public Entity makeEntity(Entity entity, double[] params) {
-				Entity e = new Entity(getStructure(), screenCenterX, 0, 0);
-				new DelayedRemove(e, params[0]);
-				new ClearHittableOnRemove(e, new AABB(-2,-2,2,2), HittableComponent.TYPE_HAZARD);
-				BulletSpawnVariance var = new BulletSpawnVariance(0,0,0,0,00,0,0.01,0.001);
-				double spawnSpeed = 1.2;
-				double sqrt2o2 = Math.sqrt(2.0)/8.0;
-				double perpAcc = -0.125;
-				double vel = 0.2;
-				double acc = 0;
-				double startAngle = 0;
-				double endAngle = Math.PI*2;
-				int numBullets = 40;
-				double angleOffset = (endAngle/numBullets)/16.0;///8.0;
-				new BulletSpawner(e, 0, -1, startAngle, endAngle, numBullets, spawnSpeed, 0.0,
-						new BulletSpawnProperties(vel, acc, 0, 0, 0.1, -0.01, sprites),
-						var, bulletType, screenArea);
-				new BulletSpawner(e, 0, -1, startAngle+angleOffset, endAngle+angleOffset, numBullets, spawnSpeed, spawnSpeed/2.0,
-						new BulletSpawnProperties(vel, acc, 0, 0, 0.1, -0.01, sprites),
-						var, bulletType, screenArea);
-				return e;
-			}
-		};
-
-
-		Entity e = new Entity(getStructure(), screenCenterX, 0, 0);
-		return makeSpawningEntity(e,
-				new IEntityMaker[] { circle1, fourLeafClover, circle2, pinwheel, circle3, crazyCircleSpiral, circle4 },
-				//new double[] { 20.0, 15.0, 20.0, 15.0 }, 3.0);
-				new double[] { 15.0, 29.0, 19.0, 14.5, 31.0, 8.0, 35.0 }, 3.0);
-
-		// Impractical, but looks absolutely amazing! Maybe use a brief spurt of this to warn
-		// the player about the "twister" attacks to come?
-//			BulletSpawnVariance var = new BulletSpawnVariance(0,0,0,0,0,0,0,0.1);
-//			double spawnSpeed = 0.05;
-//			new BulletSpawner(e, entities, 1, 1, spawnSpeed,
-//					new BulletSpawnProperties(0.5, 0, -0.5, -0.5, 0, 1),
-//					var);
-//			new BulletSpawner(e, entities, -1, 1, spawnSpeed,
-//					new BulletSpawnProperties(0.5, 0, 0.5, -0.5, 0, -1),
-//					var);
-//			new BulletSpawner(e, entities, -1, -1, spawnSpeed,
-//					new BulletSpawnProperties(0.5, 0, 0.5, 0.5, 0, 1),
-//					var);
-//			new BulletSpawner(e, entities, 1, -1, spawnSpeed,
-//					new BulletSpawnProperties(0.5, 0, -0.5, 0.5, 0, -1),
-//					var);
-//			new FadeRemove(e, 1.2, -1, 1.2); // Note this is just a gross hack to easily end the attack after 1.2 seconds.
-//			e.remove();
-
-		// This forces the player to strategically move close at the peak of the spiral to ensure a gap.
-//			new BulletSpawner(e, entities, 0, -1, 0.01,
-//					new BulletSpawnProperties(0.5, 0, 0, -0.5, 0, 0),
-//					new BulletSpawnVariance(0,0,0,0,0.1,0,0,0));
-//			new BulletSpawnerAimer(e, e2);
-//			Entity e3 = new Entity(getStructure(), screenCenterX, 0, 0);
-//			new BulletSpawner(e3, entities, 0, 1, 0.025,
-//					new BulletSpawnProperties(0.5, 0, 0, 0, 0, 0),
-//					new BulletSpawnVariance());
-//			new BulletSpawnerAimer(e3, entities.createProjectile(screenCenterX, -0.25, 0.5, 0, 0, 0, 1, 0, 2, 0.5));
-
-		// Interesting attack with lots of bullets in all sorts of directions
-//			new BulletSpawner(e, entities, 0, -1, 0.05, new BulletSpawnProperties(0.5, 0, 0, -0.25, 0, 0, 2, 10.0),
-//					new BulletSpawnVariance(3, 0, 0, 0, 0.1, 0.1, 1, 0));
-//			new BulletSpawnerAimer(e, e2);
-
-		// Spiral attack where the player needs to follow the spiral plus dodge the wall of bullets
-		// coming down diagonally. NOTE: If used, there must be something to prevent the player from
-		// safespotting at the top of the screen or it defeats the point of the attack
-//			double speed = Math.sqrt(2)/4;
-//			BulletSpawnProperties bsprops = new BulletSpawnProperties(0.75, 0, -speed, -speed, 0, 0, 2, 10.0);
-//			BulletSpawnVariance bsvar = new BulletSpawnVariance(0.1, 0, 0, 0, 0, 0, 0, 0);
-//			new BulletSpawner(e, entities, 0, -1, 0.05, bsprops, bsvar);
-//			new BulletSpawner(e, entities, 0, 1, 0.05, bsprops, bsvar);
-//			new BulletSpawner(e, entities, 1, 0, 0.05, bsprops, bsvar);
-//			new BulletSpawner(e, entities, -1, 0, 0.05, bsprops, bsvar);
-//			new BulletSpawnerAimer(e, entities.createProjectile(screenCenterX, -0.75/2.0, 0.5, 0, 0, 0, 0.75, 0, 2, 0.5));
-
-		// NOTE: Awesome "Boomerang" attack that encourages the player to spiral around to beat it.
-		// Depends on the spawning entity being in the center of the screen
-//			BulletSpawnProperties bsprops = new BulletSpawnProperties(0.75, -0.14, 0, 0, 0, 0, 2, 10.0);
-//			BulletSpawnVariance bsvar = new BulletSpawnVariance(0.8, 0, 0, 0, 0, 0, 0, 0);
-//			new BulletSpawner(e, entities, 0, -1, 0.05, bsprops, bsvar);
-//			new BulletSpawner(e, entities, 0, 1, 0.05, bsprops, bsvar);
-//			new BulletSpawnerAimer(e, e2);
-
-		// NOTE: This is a really cool pattern if something is rotating around the shooting entity
-//			new BulletSpawner(e, entities, 0, -1, 0.05, new BulletSpawnProperties(-1, 1, 0, -0.5, 0, 0, 2, 10.0),
-//					new BulletSpawnVariance(1, 0, 0, 0, 0, 0, 0, 0));
-//			new BulletSpawnerAimer(e, entities.createProjectile(screenCenterX, -0.25, 0.5, 0, 0, 0, 1, 0, 2, 0.5));
-	}
-
-	private Entity makeSpawningEntity(Entity e, IEntityMaker[] spawnedEntities, double[] delays, double difficulty) {
-		double delay = 0;
-		for(int i = 0; i < spawnedEntities.length; i++) {
-			new DelayedSpawn(e, delay, spawnedEntities[i], new double[] { delays[i], difficulty });
-			delay += delays[i];
-		}
-		new DelayedRemove(e, delay);
-		return e;
-	}
-
-	private Entity createProjectile(double posX, double posY, double velX, double velY, double accX, double accY, double perpVel, double perpAcc, double despawnDelay, double speedCap) {
-		Entity e = new Entity(getStructure(), posX, posY, 0);
-		new ProjectileComponent(e,velX,velY,accX,accY,perpVel, perpAcc,despawnDelay, speedCap, screenArea);
-		return e;
 	}
 
 	private ColliderComponent makeColliderAndCollision(Entity e) {
@@ -699,22 +244,35 @@ public class TestScene extends Scene {
 
 
 	double starsDelta = 0.0;
+	private double oldScreenLighting = 1.0;
 
 	@Override
 	public boolean update(double delta) {
-		super.updateRange(delta, new AABB(-5, -5, 5, 5));
-		starsDelta += delta;
+		if(collectables.getLives() > 0) {
+			super.updateRange(delta, new AABB(-5, -5, 5, 5));
+			starsDelta += delta;
+			oldScreenLighting = screenLighting;
+		} else {
+			screenLighting = 0.25;
+			if(continueButton.isDown()) {
+				collectables.reset();
+				screenLighting = oldScreenLighting;
+				numContinuesUsed++;
+			}
+		}
 		return false;
 	}
 
 	//private Stars3D stars = new Stars3D(800, 0.50f);
 	private Stars3D stars = new Stars3D(800, 1.0, 1.0, 0.50, 0.0);
 	private Color starColor = new Color(0.4f, 0.4f, 1.0f);
+	public static double screenLighting = 1.0;
+	private int numContinuesUsed = 0;
 
 	@Override
 	public void render(IRenderContext target) {
 		target.clear(Color.BLACK);
-		target.clearLighting(new Color(0.5));
+		target.clearLighting(new Color(screenLighting));
 		double screenShake = collectables.getScreenShake();
 		double screenLocX = CMWC4096.random(-screenShake,screenShake);
 		double screenLocY = CMWC4096.random(-screenShake,screenShake);
@@ -731,8 +289,26 @@ public class TestScene extends Scene {
 				Color.WHITE, 1.0);
 //		y = target.drawString(""+collectables.getScore(), font, 0.3, y, 0.075,
 //				Color.WHITE, 1.0);
-		target.drawString("Souls: " + collectables.getPower(), font, 0.28, y, 0.075,
+		target.drawString("Entropy: " + collectables.getPower(), font, 0.18, y, 0.075,
 				Color.WHITE, 1.0);
+		target.drawString("Lives: " + collectables.getLives(), font, -1, -1, 0.075,
+				Color.WHITE, 1.0);
+
+		if(collectables.getLives() <= 0) {
+			y = 0;
+			y = target.drawString("Game Over!", font, -0.5, y, 0.15,
+				Color.WHITE, 1.0);
+			y = target.drawString("Press C to continue", font, -0.49, y, 0.075,
+				Color.WHITE, 1.0);
+			y = target.drawString("", font, -0.5, y, 0.075, Color.WHITE, 1.0);
+			y = target.drawString("", font, -0.5, y, 0.075, Color.WHITE, 1.0);
+			y = target.drawString("", font, -0.5, y, 0.075, Color.WHITE, 1.0);
+			y = target.drawString("Continues used: " + numContinuesUsed, font, -0.44, y, 0.075,
+				Color.WHITE, 1.0);
+
+
+		}
+
 		target.cleanupResources();	
 	}
 }

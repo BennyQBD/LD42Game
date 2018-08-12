@@ -50,6 +50,8 @@ public class BulletSpawner extends EntityComponent {
 	private double shootInterval;
 	private double timeSinceShoot = 0.0;
 	private double currentShootInterval;
+	private double offsetX;
+	private double offsetY;
 	private double[] fireVectorsX;
 	private double[] fireVectorsY;
 	private AABB screenArea;
@@ -67,12 +69,11 @@ public class BulletSpawner extends EntityComponent {
 	}
 
 	// Circle/spread shooter constructor
-	public BulletSpawner(Entity entity, double fireVectorX, double fireVectorY, double startAngle, double endAngle, int numBullets, double shootInterval, BulletSpawnProperties properties, BulletSpawnVariance variance, IEntityComponentAdder entityAdder, AABB screenArea) {
-		this(entity, fireVectorX, fireVectorY, startAngle, endAngle, numBullets, shootInterval, 0, properties, variance, entityAdder, screenArea);
+	public BulletSpawner(Entity entity, double fireVectorX, double fireVectorY, double startAngle, double endAngle, double shootInterval, BulletSpawnProperties properties, BulletSpawnVariance variance, IEntityComponentAdder entityAdder, AABB screenArea, int numBullets) {
+		this(entity, fireVectorX, fireVectorY, startAngle, endAngle, shootInterval, 0, 0, 0, properties, variance, entityAdder, screenArea, numBullets);
 	}
 
-
-	public BulletSpawner(Entity entity, double fireVectorX, double fireVectorY, double startAngle, double endAngle, int numBullets, double shootInterval, double shootStartDelay, BulletSpawnProperties properties, BulletSpawnVariance variance, IEntityComponentAdder entityAdder, AABB screenArea) {
+	public BulletSpawner(Entity entity, double fireVectorX, double fireVectorY, double startAngle, double endAngle, double shootInterval, double shootStartDelay, double offsetX, double offsetY, BulletSpawnProperties properties, BulletSpawnVariance variance, IEntityComponentAdder entityAdder, AABB screenArea, int numBullets) {
 		super(entity, ID);
 		double[] fireVectorsX = new double[numBullets];
 		double[] fireVectorsY = new double[numBullets];
@@ -90,7 +91,7 @@ public class BulletSpawner extends EntityComponent {
 			fireVectorsX[0] = fireVectorX*cosa - fireVectorY*sina;
 			fireVectorsY[0] = fireVectorX*sina + fireVectorY*cosa;
 		} else {
-			double step = (endAngle-startAngle)/numBullets;
+			double step = (endAngle-startAngle)/(numBullets-1);
 			double angle = startAngle;
 			for(int i = 0; i < numBullets; i++) {
 				double cosa = Math.cos(angle);
@@ -101,27 +102,25 @@ public class BulletSpawner extends EntityComponent {
 			}
 		}
 
-		init(entity, fireVectorsX, fireVectorsY, shootInterval, properties, variance, entityAdder, screenArea, shootStartDelay);
+		init(entity, fireVectorsX, fireVectorsY, shootInterval, properties, variance, entityAdder, screenArea, shootStartDelay, offsetX, offsetY);
 	}
 
-//	public BulletSpawner(Entity entity, double fireVectorX, double fireVectorY, double shootInterval, BulletSpawnProperties properties, BulletSpawnVariance variance, AABB screenArea) {
-//		this(entity, fireVectorX, fireVectorY, shootInterval, properties, variance, null, screenArea);
-//	}
-	public BulletSpawner(Entity entity, double fireVectorX, double fireVectorY, double shootInterval, BulletSpawnProperties properties, BulletSpawnVariance variance, IEntityComponentAdder entityAdder, AABB screenArea) {
-		this(entity, new double[] {fireVectorX}, new double[] {fireVectorY}, shootInterval, properties, variance, entityAdder, screenArea);
+	public BulletSpawner(Entity entity, double fireVectorX, double fireVectorY, double shootInterval, double shootStartDelay, double offsetX, double offsetY, BulletSpawnProperties properties, BulletSpawnVariance variance, IEntityComponentAdder entityAdder, AABB screenArea) {
+		this(entity, new double[] {fireVectorX}, new double[] {fireVectorY}, shootInterval, shootStartDelay, offsetX, offsetY, properties, variance, entityAdder, screenArea);
 	}
 
-
-	public BulletSpawner(Entity entity, double[] fireVectorsX, double[] fireVectorsY, double shootInterval, BulletSpawnProperties properties, BulletSpawnVariance variance, IEntityComponentAdder entityAdder, AABB screenArea) {
+	public BulletSpawner(Entity entity, double[] fireVectorsX, double[] fireVectorsY, double shootInterval, double shootStartDelay, double offsetX, double offsetY, BulletSpawnProperties properties, BulletSpawnVariance variance, IEntityComponentAdder entityAdder, AABB screenArea) {
 		super(entity, ID);
-		init(entity, fireVectorsX, fireVectorsY, shootInterval, properties, variance, entityAdder, screenArea, 0 );
+		init(entity, fireVectorsX, fireVectorsY, shootInterval, properties, variance, entityAdder, screenArea, shootStartDelay, offsetX, offsetY);
 	}
 
-	private final void init(Entity entity, double[] fireVectorsX, double[] fireVectorsY, double shootInterval, BulletSpawnProperties properties, BulletSpawnVariance variance, IEntityComponentAdder entityAdder, AABB screenArea, double shootStartDelay) {
+	private final void init(Entity entity, double[] fireVectorsX, double[] fireVectorsY, double shootInterval, BulletSpawnProperties properties, BulletSpawnVariance variance, IEntityComponentAdder entityAdder, AABB screenArea, double shootStartDelay, double offsetX, double offsetY) {
 		this.entityAdder = entityAdder;
 		this.shootInterval = shootInterval;
 		this.fireVectorsX = fireVectorsX;
 		this.fireVectorsY = fireVectorsY;
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
 		this.screenArea = screenArea;
 		if(fireVectorsX.length != fireVectorsY.length) {
 			throw new IllegalArgumentException();
@@ -148,7 +147,7 @@ public class BulletSpawner extends EntityComponent {
 			};
 		}
 
-		this.timeSinceShoot = currentShootInterval - shootStartDelay;
+		this.timeSinceShoot = -shootStartDelay;
 	}
 
 	private void generateNewShootInterval() {
@@ -161,7 +160,7 @@ public class BulletSpawner extends EntityComponent {
 		while(timeSinceShoot >= currentShootInterval) {
 			timeSinceShoot -= currentShootInterval;
 			generateNewShootInterval();
-			properties.spawnBullet(variance, getEntity().getX(), getEntity().getY(),
+			properties.spawnBullet(variance, getEntity().getX() + offsetX, getEntity().getY() + offsetY,
 					fireVectorsX, fireVectorsY, getBulletSpawnerAimer(), entityAdder, getEntity().getSpatialStructure(), timeSinceShoot, screenArea);
 		}
 	}

@@ -252,6 +252,7 @@ public class InventoryComponent extends EntityComponent {
 		getEntity().setY(startPosY);
 		setInvulnerabilityTime(invulnerabilityTimeAfterHit);
 		isHit = false;
+		collectables.addLives(-1);
 	}
 
 	private void handleHit(Entity entity, HittableComponent c, ColliderComponent collider) {

@@ -48,10 +48,14 @@ public class EnemyComponent extends EntityComponent {
 	private ColliderComponent colliderComponent;
 	private double initialHealth;
 	private double health;
+	private double screenShakeAmount;
 	private int numToSpawn;
 	private IEntityMaker spawnOnDeath;
 	private Collectables collectables;
 	private double[] spawnParams;
+	private int[] hittableComponentTypes;
+	private List<Entity> bulletMoveLocations;
+	private boolean isDead = false;
 
 	private ColliderComponent getColliderComponent() {
 		if (colliderComponent != null) {
@@ -63,7 +67,8 @@ public class EnemyComponent extends EntityComponent {
 		return colliderComponent;
 	}
 
-	public EnemyComponent(Entity entity, Collectables collectables, double health, IEntityMaker spawnOnDeath, double[] spawnParams, int numToSpawn) {
+	public EnemyComponent(Entity entity, Collectables collectables, double health, double screenShakeAmount,
+			int[] hittableComponentTypes, IEntityMaker spawnOnDeath, double[] spawnParams, int numToSpawn, List<Entity> bulletMoveLocations) {
 		super(entity, ID);
 		this.health = health;
 		this.initialHealth = health;
@@ -71,6 +76,9 @@ public class EnemyComponent extends EntityComponent {
 		this.spawnParams = spawnParams;
 		this.collectables = collectables;
 		this.numToSpawn = numToSpawn;
+		this.screenShakeAmount = screenShakeAmount;
+		this.hittableComponentTypes = hittableComponentTypes;
+		this.bulletMoveLocations = bulletMoveLocations;
 	}
 
 	@Override
@@ -92,11 +100,19 @@ public class EnemyComponent extends EntityComponent {
 						}
 
 						HittableComponent c = (HittableComponent) component;
-						if(c.getType() == HittableComponent.TYPE_ENEMY_HAZARD) {
-							collectables.addScore(5);
-							collectables.addScreenShake(0.0025);
-							damage(c.getDamage());
-							entity.remove();
+						for(int i = 0; i < hittableComponentTypes.length; i++) {
+							if(c.getType() == hittableComponentTypes[i]) {
+								collectables.addScore(5);
+								damage(c.getDamage());
+								if(bulletMoveLocations == null || bulletMoveLocations.size() == 0) {
+									entity.remove();
+								} else {
+									int index = Math.min((int)CMWC4096.random(0, bulletMoveLocations.size()), bulletMoveLocations.size()-1);
+									Entity newLocation = bulletMoveLocations.get(index);
+									entity.setXY(newLocation.getX(), newLocation.getY());
+								}
+								break;
+							}
 						}
 					}
 				});
@@ -104,7 +120,8 @@ public class EnemyComponent extends EntityComponent {
 
 	private void damage(double amt) {
 		health -= amt;
-		if(health <= 0) {
+		if(health <= 0 && !isDead) {
+			collectables.addScreenShake(screenShakeAmount);
 			collectables.addScore((long)(initialHealth*10));
 			if(spawnOnDeath != null) {
 				for(int i = 0; i < numToSpawn; i++) {
@@ -112,6 +129,7 @@ public class EnemyComponent extends EntityComponent {
 				}
 			}
 			getEntity().remove();
+			isDead = true;
 		}
 	}
 }

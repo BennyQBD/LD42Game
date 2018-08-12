@@ -87,7 +87,7 @@ import engine.util.IDAssigner;
 
 public class Main {
 	public static void main(String[] args) throws IOException, ParseException {
-		Debug.init(true, true);
+		Debug.init(false, true);
 		IDisplay display = new OpenGLDisplay(480, 480, "My Display");
 		CoreEngine engine = new CoreEngine(display, new TestScene(
 				display.getInput(), display.getRenderDevice(),

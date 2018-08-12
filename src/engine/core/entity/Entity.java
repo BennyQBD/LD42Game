@@ -348,11 +348,22 @@ public class Entity implements ISpatialObject, Comparable<Entity> {
 	}
 
 	public void setX(double newX) {
+		structure.remove(this);
 		this.x = newX;
+		structure.add(this);
 	}
 
 	public void setY(double newY) {
+		structure.remove(this);
 		this.y = newY;
+		structure.add(this);
+	}
+
+	public void setXY(double newX, double newY) {
+		structure.remove(this);
+		this.x = newX;
+		this.y = newY;
+		structure.add(this);
 	}
 
 	@Override

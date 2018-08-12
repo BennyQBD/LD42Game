@@ -21,6 +21,15 @@ public class ProjectileComponent extends EntityComponent {
 	private double timeSinceRender = 0.0;
 	private AABB screenArea;
 
+	public double getVelocityMagnitude() {
+		return Math.sqrt(velX*velX+velY*velY);
+	}
+
+	public void setVelXY(double velX, double velY) {
+		this.velX = velX;
+		this.velY = velY;
+	}
+
 	public ProjectileComponent(Entity entity, double velX, double velY,
 	double accX, double accY, double perpVel, double perpAcc, double offscreenRemoveTime, double speedCap, AABB screenArea) {
 		super(entity, ID);

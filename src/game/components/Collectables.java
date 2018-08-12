@@ -44,17 +44,34 @@ import engine.util.IDAssigner;
 
 public class Collectables {
 	private long score = 0;
+	private int lives;
 	private double power;
 	private double maxPower;
 	private double screenShake = 0.0;
 
+	private double initialMaxPower;
+	private double initialPower;
+	private int initialLives;
+
 	public Collectables() {
-		this(99.9, 1.0);
+		this(99.9, 4.5, 5);
 	}
 	
-	public Collectables(double maxPower, double initialPower) {
+	public Collectables(double maxPower, double initialPower, int numStartingLives) {
 		this.maxPower = maxPower;
 		this.power = initialPower;
+		this.lives = numStartingLives;
+
+		this.initialMaxPower = this.maxPower;
+		this.initialPower = this.power;
+		this.initialLives = this.lives;
+	}
+
+	public void reset() {
+		this.maxPower = this.initialMaxPower;
+		this.power = this.initialPower;
+		this.lives = this.initialLives;
+		this.score = 0;
 	}
 
 	public void addScore(long amt) {
@@ -80,6 +97,10 @@ public class Collectables {
 		power = newPower;
 	}
 
+	public void addLives(int numLives) {
+		this.lives += numLives;
+	}
+
 	public void decayPower(double factorPerSecond, double minPower, double delta) {
 		if(power <= minPower) {
 			return;
@@ -92,6 +113,10 @@ public class Collectables {
 
 	public long getScore() {
 		return score;
+	}
+	
+	public int getLives() {
+		return lives;
 	}
 
 	public double getPower() {
