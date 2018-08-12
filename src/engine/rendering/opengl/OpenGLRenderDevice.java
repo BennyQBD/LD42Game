@@ -5,6 +5,7 @@
 package engine.rendering.opengl;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.ARBVertexBufferObject.*;
 //import static org.lwjgl.opengl.GL30.*;
@@ -313,8 +314,8 @@ public class OpenGLRenderDevice implements IRenderDevice {
 			int filter, int format) {
 		int id = glGenTextures();
 		bindTexture(id);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA,

@@ -91,8 +91,8 @@ public class EntityFactory {
 			Entity e = new Entity(spatialStructure, startX, startY, 0);
 			new ProjectileComponent(e,velX, velY, 0, 0, perpVel, perpAcc, 0.5, 2.0, screenArea);
 			new ColliderComponent(e);
-			new SpriteComponent(e, 0.075, 0.075, primarySheet, spriteIndex, Color.WHITE);
-			new BulletSpawner(e, 0, -1, startAngle, endAngle, shootInterval, 0, 0, -0.075,
+			new SpriteComponent(e, 0.15, 0.15, primarySheet, spriteIndex, Color.WHITE);
+			new BulletSpawner(e, 0, -1, startAngle, endAngle, shootInterval, 0, 0, -0.15,
 							new BulletSpawnProperties(bulletSpeed, 0, 0, 0, 0, 0, primarySheet),
 							new BulletSpawnVariance(0,shootVariance,0,0,0,0,0,0), bulletType, screenArea, numBullets);
 			new BulletSpawnerAimer(e,player);
@@ -355,7 +355,7 @@ public class EntityFactory {
 				@Override
 				public void addToEntity(Entity e) {
 					new ColliderComponent(e);
-					new SpriteComponent(e, 0.3, 0.3, bossSheet, 4, Color.WHITE);
+					new SpriteComponent(e, 0.3, 0.3, bossSheet, 0, Color.WHITE);
 				}
 			};
 
@@ -637,7 +637,7 @@ public class EntityFactory {
 				whiteHoleList.add(e);
 				ColliderComponent c = new ColliderComponent(e);
 				new ColliderComponent(e);
-				new SpriteComponent(e, 0.075, 0.075, primarySheet, 4, Color.WHITE);
+				SpriteComponent s = new SpriteComponent(e, 0.150, 0.150, primarySheet, new int[] {80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103}, 0.1, Color.WHITE);
 				new InvalidAreaRemove(e, screenArea);
 				new ListRemoveComponent(e, whiteHoleList);				
 			}
@@ -648,7 +648,8 @@ public class EntityFactory {
 			public void addToEntity(Entity e) {
 				ColliderComponent c = new ColliderComponent(e);
 				new ColliderComponent(e);
-				new SpriteComponent(e, 0.075, 0.075, primarySheet, 3, Color.WHITE);
+				SpriteComponent s = new SpriteComponent(e, 0.150, 0.150, primarySheet, new int[] {32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55}, 0.1, Color.WHITE);
+//				s.setTransparency(0.75);
 				new EnemyComponent(e, collectables, 1000.0, 0.005, new int[] {HittableComponent.TYPE_ENEMY_HAZARD, HittableComponent.TYPE_HAZARD}, collectableSpawner, new double[] {0.01, 0.02}, 4, whiteHoleList);
 				new InvalidAreaRemove(e, screenArea);
 			}

@@ -62,6 +62,8 @@ public class TestScene extends Scene {
 	private SpriteSheet primarySheet;
 	private Collectables collectables = new Collectables();
 	private IButton continueButton = null;
+	private IButton startGameButton = null;
+	private boolean isGameStarted = false;
 	private EntityFactory entityFactory;
 	
 	private AABB screenArea;
@@ -103,7 +105,7 @@ public class TestScene extends Scene {
 	}
 
 	private Entity createPlayer(double posX, double posY, Collectables collectables, double invulnerabilityTimeAfterHit, double bombTimeInvulnerability, double deathBombTime, double speed, double fireSpeed, double powerDecayPerSecond, double minPowerToDecayTo, IEntityMaker shotType, IAxis movementX, IAxis movementY, IButton bombButton, IButton slowDownControl, IButton fireButton, SpriteSheet sprites) {
-		final double size = (47.0/480.0+37.0/640.0)/2.0;
+		final double size = ((47.0/480.0+37.0/640.0)/2.0)*2.0;
 		final double sizeY = size;
 		final double sizeX = size;
 		posY = posY + sizeY/2.0;
@@ -130,9 +132,11 @@ public class TestScene extends Scene {
 		SpriteSheetFactory sprites = new SpriteSheetFactory(
 				new TextureFactory(device, "./res/"));
 		primarySheet = sprites.get("spriteSheet.png", 16, 16, 0,
-				IRenderDevice.FILTER_LINEAR);
-		entityFactory = new EntityFactory(getStructure(), screenArea, primarySheet, primarySheet, collectables, device);
+				IRenderDevice.FILTER_NEAREST);
+		entityFactory = new EntityFactory(getStructure(), screenArea, primarySheet, sprites.get("finalBoss.png", 1, 1, 0,
+				IRenderDevice.FILTER_NEAREST), collectables, device);
 		continueButton = new KeyButton(input, new int[] { IInput.KEY_C });
+		startGameButton = new KeyButton(input, new int[] { IInput.KEY_Z });
 
 		font = sprites.get("monospace.png", 16, 16, 1,
 				IRenderDevice.FILTER_LINEAR);
@@ -146,7 +150,7 @@ public class TestScene extends Scene {
 		
 		Entity e = new Entity(getStructure(), 0, 0, 0);
 		int numEnemies = 4;
-		double startSpawnDelay = -0.0;
+		double startSpawnDelay = 0.0;
 		// INTRO FOR LEVEL
 		new DelayedSpawn(e, startSpawnDelay, entityFactory.basicEnemy, new double[] { rightWallX, 1.1, -0.3, -0.35, -0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
 		new DelayedSpawn(e, startSpawnDelay, entityFactory.basicEnemy, new double[] { -1, 1.1, 0.3, -0.35, 0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
@@ -208,7 +212,7 @@ public class TestScene extends Scene {
 		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { -0.5, 1.1, 0, -0.7, -0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
 		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { 1.1, 0.5, -0.7, 0, -0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
 		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { -1.1, 0.5, 0.7, 0, 0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
-
+//
 		new DelayedSpawn(e, startSpawnDelay+135.0, entityFactory.boss, new double[] {}, 1, 0.0);
 
 
@@ -244,33 +248,46 @@ public class TestScene extends Scene {
 
 
 	double starsDelta = 0.0;
+	double starsDelta2 = 0.0;
 	private double oldScreenLighting = 1.0;
 
 	@Override
 	public boolean update(double delta) {
-		if(collectables.getLives() > 0 && gameWonCountDown > 0.0) {
-			super.updateRange(delta, new AABB(-5, -5, 5, 5));
-			starsDelta += delta;
-			oldScreenLighting = screenLighting;
-		} else {
-			screenLighting = 0.25;
-			collectables.multiplyScreenShake(0.00, 1.0);
-			if(continueButton.isDown()) {
-				collectables.reset();
-				screenLighting = oldScreenLighting;
-				numContinuesUsed++;
+		if(isGameStarted) {
+			if(collectables.getLives() > 0 && gameWonCountDown > 0.0) {
+				super.updateRange(delta, new AABB(-5, -5, 5, 5));
+				starsDelta += delta;
+				oldScreenLighting = screenLighting;
+			} else {
+				screenLighting = 0.25;
+				collectables.multiplyScreenShake(0.00, 1.0);
+				if(continueButton.isDown()) {
+					collectables.reset();
+					screenLighting = oldScreenLighting;
+					numContinuesUsed++;
+				}
 			}
-		}
 
-		if(isGameWon) {
-			gameWonCountDown -= delta;
+			if(isGameWon) {
+				gameWonCountDown -= delta;
+			}
+		} else {
+			starsDelta2 += delta;
+			if(startGameButton.isDown()) {
+				isGameStarted = true;
+			}
 		}
 		return false;
 	}
 
-	//private Stars3D stars = new Stars3D(800, 0.50f);
-	private Stars3D stars = new Stars3D(800, 1.0, 1.0, 0.50, 0.0);
-	private Color starColor = new Color(0.4f, 0.4f, 1.0f);
+	//private Stars3D stars = new Stars3D(800, 1.0, 1.0, 0.50, 0.0);
+	private Stars3D thunderCloud = new Stars3D(800, 1.0, 1.0, 0.50, 0.0);
+	private Stars3D stars = new Stars3D(200, 5.0, 5.0, 5.0, 2.0);
+	private Stars3D nebula = new Stars3D(2400, 1.0, 1.0, 1.0, 0.0);
+	private Stars3D nebula2 = new Stars3D(800, 1.0, 1.0, 1.0, 0.0);
+	private Color starColor = new Color(1.0f, 1.0f, 1.0f);
+	private Color nebulaColor = new Color(0.4f, 0.4f, 1.0f);
+	private Color nebula2Color = new Color(1.0f, 0.5f, 1.0f);
 	public static double screenLighting = 1.0;
 	public static boolean isGameWon = false;
 	private static double gameWonCountDown = 3.0;
@@ -279,48 +296,68 @@ public class TestScene extends Scene {
 	@Override
 	public void render(IRenderContext target) {
 		target.clear(Color.BLACK);
-		target.clearLighting(new Color(screenLighting));
-		double screenShake = collectables.getScreenShake();
-		double screenLocX = CMWC4096.random(-screenShake,screenShake);
-		double screenLocY = CMWC4096.random(-screenShake,screenShake);
-		//stars.updateAndRender(target, (float)starsDelta, primarySheet, 0, 0.1f, 0.1f, 0.1, starColor, 0.0f, 0.0f, -0.02f, (float)screenLocX, (float)screenLocY, false, false, true);
-		stars.updateAndRender(target, (float)starsDelta, primarySheet, 0, 0.1, 0.1, 0.1, starColor, 0.02, 0, -0.02, (float)screenLocX, (float)screenLocY, true, true, true);
-		collectables.multiplyScreenShake(0.006, starsDelta);
-		starsDelta = 0.0;
+		if(isGameStarted) {
+			target.clearLighting(new Color(screenLighting));
+			double screenShake = collectables.getScreenShake();
+			double screenLocX = CMWC4096.random(-screenShake,screenShake);
+			double screenLocY = CMWC4096.random(-screenShake,screenShake);
+			//stars.updateAndRender(target, (float)starsDelta, primarySheet, 0, 0.1f, 0.1f, 0.1, starColor, 0.0f, 0.0f, -0.02f, (float)screenLocX, (float)screenLocY, false, false, true);	
+	//		stars.updateAndRender(target, (float)starsDelta, primarySheet, 0, 0.1, 0.1, 0.1, starColor, 0.02, 0, -0.02, (float)screenLocX, (float)screenLocY, true, true, true);
+			stars.updateAndRender(target, (float)starsDelta, primarySheet, 11, 0.02, 0.02, 0.9, starColor, 0.2, -0.2, 0, (float)screenLocX, (float)screenLocY, true, true, true);
+			nebula.updateAndRender(target, (float)starsDelta, primarySheet, 12, 0.05, 0.05, 0.0125, nebulaColor, 0.04, 0, -0.04, (float)screenLocX, (float)screenLocY, true, true, true);
+			nebula2.updateAndRender(target, (float)starsDelta, primarySheet, 12, 0.05, 0.05, 0.0125, nebula2Color, 0.04, 0, -0.04, (float)screenLocX, (float)screenLocY, true, true, true);
 
-		super.renderRange(target, screenLocX, screenLocY);
-		target.applyLighting();
+			collectables.multiplyScreenShake(0.006, starsDelta);
+			starsDelta = 0.0;
 
-		double y = 0.925;
-		target.drawString("Score: "+collectables.getScore(), font, -1, y, 0.075,
-				Color.WHITE, 1.0);
-//		y = target.drawString(""+collectables.getScore(), font, 0.3, y, 0.075,
-//				Color.WHITE, 1.0);
-		target.drawString("Entropy: " + collectables.getPower(), font, 0.18, y, 0.075,
-				Color.WHITE, 1.0);
-		target.drawString("Lives: " + collectables.getLives(), font, -1, -1, 0.075,
-				Color.WHITE, 1.0);
+			super.renderRange(target, screenLocX, screenLocY);
+			target.applyLighting();
 
-		if(collectables.getLives() <= 0) {
-			y = 0;
-			y = target.drawString("Game Over!", font, -0.5, y, 0.15,
-				Color.WHITE, 1.0);
-			y = target.drawString("Press C to continue", font, -0.49, y, 0.075,
-				Color.WHITE, 1.0);
-			y = target.drawString("", font, -0.5, y, 0.075, Color.WHITE, 1.0);
-			y = target.drawString("", font, -0.5, y, 0.075, Color.WHITE, 1.0);
-			y = target.drawString("", font, -0.5, y, 0.075, Color.WHITE, 1.0);
-			y = target.drawString("Continues used: " + numContinuesUsed, font, -0.44, y, 0.075,
-				Color.WHITE, 1.0);
-		} else if(gameWonCountDown <= 0.0) {
-			y = 0;
-			y = target.drawString("You Won!", font, -0.5, y, 0.15,
-				Color.WHITE, 1.0);
-			y = target.drawString("The evil behemoth known only as 'The frickin blob' has finally been subdued", font, -1.0, y, 0.075,
-				Color.WHITE, 1.0);
+			double y = 0.925;
+			target.drawString("Score: "+collectables.getScore(), font, -1, y, 0.075,
+					Color.WHITE, 1.0);
+	//		y = target.drawString(""+collectables.getScore(), font, 0.3, y, 0.075,
+	//				Color.WHITE, 1.0);
+			target.drawString("Entropy: " + collectables.getPower(), font, 0.18, y, 0.075,
+					Color.WHITE, 1.0);
+			target.drawString("Lives: " + collectables.getLives(), font, -1, -1, 0.075,
+					Color.WHITE, 1.0);
+
+			if(collectables.getLives() <= 0) {
+				y = 0;
+				y = target.drawString("Game Over!", font, -0.5, y, 0.15,
+					Color.WHITE, 1.0);
+				y = target.drawString("Press C to continue", font, -0.49, y, 0.075,
+					Color.WHITE, 1.0);
+				y = target.drawString("", font, -0.5, y, 0.075, Color.WHITE, 1.0);
+				y = target.drawString("", font, -0.5, y, 0.075, Color.WHITE, 1.0);
+				y = target.drawString("", font, -0.5, y, 0.075, Color.WHITE, 1.0);
+				y = target.drawString("Continues used: " + numContinuesUsed, font, -0.44, y, 0.075,
+					Color.WHITE, 1.0);
+			} else if(gameWonCountDown <= 0.0) {
+				y = 0;
+				y = target.drawString("You Won!", font, -0.5, y, 0.15,
+					Color.WHITE, 1.0);
+				y = target.drawString("The evil behemoth known only as 'The frickin blob' has finally been subdued. Congratulation! A winner is you!", font, -1.0, y, 0.075,
+					Color.WHITE, 1.0);
+			}
+		} else {
+			thunderCloud.updateAndRender(target, (float)starsDelta2, primarySheet, 0, 0.1, 0.1, 0.1, new Color(0.5f, 0.5f, 1.0f), 0.02, 0, -0.02, (float)0.0f, (float)0.0f, true, true, true);
+			starsDelta2 = 0.0;
+			double y = 0.75;
+			y = target.drawString("Celestial Lacuna", font, -0.95, y, 0.15, Color.WHITE, 1.0);
+			y = - 0.5;
+			y = target.drawString("Press Z to begin", font, -0.49, y, 0.075,
+					Color.WHITE, 1.0);
+			y = target.drawString("", font, -0.89, y, 0.075, Color.WHITE, 1.0);
+			y = target.drawString("Controls:", font, -0.89, y, 0.075, Color.WHITE, 1.0);
+			y = target.drawString("Arrow Keys - Movement", font, -0.89, y, 0.075, Color.WHITE, 1.0);
+			y = target.drawString("Z - Shoot", font, -0.89, y, 0.075, Color.WHITE, 1.0);
+			y = target.drawString("Shift - Slow Down", font, -0.89, y, 0.075, Color.WHITE, 1.0);
+			y = target.drawString("X - Entropy Burst", font, -0.89, y, 0.075, Color.WHITE, 1.0);
+
 		}
-
-		target.cleanupResources();	
+		target.cleanupResources();
 	}
 }
 
