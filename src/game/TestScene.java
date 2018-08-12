@@ -146,68 +146,68 @@ public class TestScene extends Scene {
 		
 		Entity e = new Entity(getStructure(), 0, 0, 0);
 		int numEnemies = 4;
-		double startSpawnDelay = -135.0;
+		double startSpawnDelay = -0.0;
 		// INTRO FOR LEVEL
-//		new DelayedSpawn(e, startSpawnDelay, entityFactory.basicEnemy, new double[] { rightWallX, 1.1, -0.3, -0.35, -0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
-//		new DelayedSpawn(e, startSpawnDelay, entityFactory.basicEnemy, new double[] { -1, 1.1, 0.3, -0.35, 0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
-//
-//		// SUDDEN INTENSITY 
-//		new DelayedSpawn(e, startSpawnDelay+10.0, entityFactory.basicEnemy2, new double[] { 0.5, 1.1, 0.0, -1.0, -0.2, 0.0, 0.5, 1.0, 0.0, 0, Math.PI*2.0, 8, 0.005, 10.0, 6 }, 4, 0.75);
-//		new DelayedSpawn(e, startSpawnDelay+10.0, entityFactory.basicEnemy2, new double[] { -0.5, 1.1, 0.0, -1.0, 0.2, 0.0, 0.5, 1.0, 0.0, 0, Math.PI*2.0, 8, 0.005, 10.0, 6 }, 4, 0.75);
-//
-//		new DelayedSpawn(e, startSpawnDelay+15.0, entityFactory.basicEnemy, new double[] { 0.75, 1.1, -0.3, -0.35, -0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
-//		new DelayedSpawn(e, startSpawnDelay+15.0, entityFactory.basicEnemy, new double[] { -0.75, 1.1, 0.3, -0.35, 0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
-//		new DelayedSpawn(e, startSpawnDelay+15.0, entityFactory.basicEnemy, new double[] { 1, -0.8, -0.5, 0.6, -0.15, 0.0, 0.5, 0.9, 1.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 4, 1.5);
-//		new DelayedSpawn(e, startSpawnDelay+15.0, entityFactory.basicEnemy, new double[] { -1, -0.8, 0.5, 0.6, 0.15, 0.0, 0.5, 0.9, 1.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 4, 1.5);
-//
-//		new DelayedSpawn(e, startSpawnDelay+23.0, entityFactory.basicEnemy2, new double[] { 0.75, 1.1, -0.3, -0.35, -0.3, 0.2, 0.5, 1.6, 1.0, -0.25, 0.25, 3, 0.0125, 50.0, 10 }, 4, 1.5);
-//		new DelayedSpawn(e, startSpawnDelay+23.0, entityFactory.basicEnemy2, new double[] { -0.75, 1.1, 0.3, -0.35, 0.3, -0.2, 0.5, 1.6, 1.0, -0.25, 0.25, 3, 0.0125, 50.0, 10 }, 4, 1.5);
-//		new DelayedSpawn(e, startSpawnDelay+23.0, entityFactory.basicEnemy2, new double[] { 1.1, 0.75, -1.0, 0.0, 0.6, -0.6, 0.75, 1.2, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 6, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+23.0, entityFactory.basicEnemy2, new double[] { -1.1, 0.75, 1.0, 0.0, -0.6, 0.6, 0.75, 1.2, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 6, 1.0);
-//
-//		// INTRO FOR BLACK/WHITE HOLES
-//		new DelayedSpawn(e, startSpawnDelay+33.0, entityFactory.blackHoleEnemy, new double[] { 1, -0.5, -0.3, 0.35, -0.1, 0.0, 0.25, 1.3, 1.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 4, 3.0);
-//		new DelayedSpawn(e, startSpawnDelay+33.0, entityFactory.whiteHoleEnemy, new double[] { -1, -0.5, 0.3, 0.35, 0.1, 0.0, 0.25, 1.3, 1.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 4, 3.0);
-//
-//		new DelayedSpawn(e, startSpawnDelay+45.0, entityFactory.blackHoleEnemy, new double[] { 1, -0.25, -0.2, 0.5, 0.24, 0.0, 0.25, 4.0, 2.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 6, 2.0);
-//		new DelayedSpawn(e, startSpawnDelay+46.0, entityFactory.whiteHoleEnemy, new double[] { 1, -0.25, -0.2, 0.5, 0.24, 0.0, 0.25, 4.0, 2.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 6, 2.0);
-//		new DelayedSpawn(e, startSpawnDelay+45.0, entityFactory.blackHoleEnemy, new double[] { -1, -0.25, 0.2, 0.5, -0.24, 0.0, 0.25, 4.0, 2.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 6, 2.0);
-//		new DelayedSpawn(e, startSpawnDelay+46.0, entityFactory.whiteHoleEnemy, new double[] { -1, -0.25, 0.2, 0.5, -0.24, 0.0, 0.25, 4.0, 2.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 6, 2.0);
-//		new DelayedSpawn(e, startSpawnDelay+45.0, entityFactory.basicEnemy, new double[] { 1, -0.5, -0.3, 0.35, -0.1, 0.0, 0.5, 1.5, 1.0, -0.5, 0.5, 4, 0.005, 10.0, 4 }, 6, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+46.0, entityFactory.basicEnemy, new double[] { -1, -0.5, 0.3, 0.35, 0.1, 0.0, 0.5, 1.5, 1.0, -0.5, 0.5, 4, 0.005, 10.0, 4 }, 6, 1.0);
-//
-//		new DelayedSpawn(e, startSpawnDelay+59.0, entityFactory.basicEnemy2, new double[] { 1.1, 0.75, -1.0, 0.0, 0.6, -0.0, 0.75, 1.2, 1.0, -0.25, 0.25, 1, 0.005, 20.0, 5 }, 8, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+59.0, entityFactory.basicEnemy2, new double[] { -1.1, 0.75, 1.0, 0.0, -0.6, 0.0, 0.75, 1.2, 1.0, -0.25, 0.25, 1, 0.005, 20.0, 5 }, 8, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+62.0, entityFactory.basicEnemy2, new double[] { 0.9, 1.1, -0.45, -0.45, -0.2, -0.0, 0.5, 1.2, 1.0, -0.25, 0.25, 1, 0.0075, 30.0, 6 }, 8, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+62.0, entityFactory.basicEnemy2, new double[] { -0.9, 1.1, 0.45, -0.45, 0.2, 0.0, 0.5, 1.2, 1.0, -0.25, 0.25, 1, 0.0075, 30.0, 6 }, 8, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+65.0, entityFactory.basicEnemy2, new double[] { 1.0, 0.9, -0.4, -0.0, -0.0, -0.0, 0.25, 1.2, 1.0, -0.4, 0.4, 7, 0.015, 60.0, 8}, 8, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+65.0, entityFactory.basicEnemy2, new double[] { -1.0, 0.9, 0.4, -0.0, 0.0, 0.0, 0.25, 1.2, 1.0, -0.4, 0.4, 7, 0.015, 60.0, 8 }, 8, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+70.0, entityFactory.blackHoleEnemy, new double[] { 1.0, -0.9, -0.4, 0.3, -0.0, -0.0, 0.125, 1.2, 1.0, -0.25, 0.25, 1, 0.015, 60.0, 4 }, 8, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+70.0, entityFactory.whiteHoleEnemy, new double[] { -1.0, -0.9, 0.4, 0.3, 0.0, 0.0, 0.125, 1.2, 1.0, -0.25, 0.25, 1, 0.015, 60.0, 4 }, 8, 1.0);
-//
-//		new DelayedSpawn(e, startSpawnDelay+84.0, entityFactory.basicEnemy2, new double[] { 1, 0.9, -0.3, -0.1, -0.04, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 35.0, 7 }, 8, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+84.0, entityFactory.basicEnemy2, new double[] { -1, 0.9, 0.3, -0.1, 0.04, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 35.0, 7 }, 8, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+84.0, entityFactory.basicEnemy2, new double[] { 1, 0.7, -0.3, 0.1, 0.04, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 35.0, 7 }, 8, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+84.0, entityFactory.basicEnemy2, new double[] { -1, 0.7, 0.3, 0.1, -0.04, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 35.0, 7 }, 8, 1.0);
-//
-//		new DelayedSpawn(e, startSpawnDelay+83.0, entityFactory.seekingEnemy, new double[] { 1.0, 0.9, -0.15, 0.075, -0.0, -0.0, 0.38, 2.0, 1.0, -0.35, 0.35, 3, 0.025, 120.0, 16 }, 1, 3.0);
-//		new DelayedSpawn(e, startSpawnDelay+83.0, entityFactory.seekingEnemy, new double[] { -1.0, 0.9, 0.15, 0.075, 0.0, 0.0, 0.38, 2.0, 1.0, -0.35, 0.35, 3, 0.025, 120.0, 16 }, 1, 3.0);
-//		new DelayedSpawn(e, startSpawnDelay+86.0, entityFactory.seekingEnemy, new double[] { 1.0, 0.4, -0.15, 0.075, -0.0, -0.0, 0.38, 2.0, 1.0, -0.35, 0.35, 3, 0.025, 120.0, 16 }, 1, 3.0);
-//		new DelayedSpawn(e, startSpawnDelay+86.0, entityFactory.seekingEnemy, new double[] { -1.0, 0.4, 0.15, 0.075, 0.0, 0.0, 0.38, 2.0, 1.0, -0.35, 0.35, 3, 0.025, 120.0, 16 }, 1, 3.0);
-//
-//		new DelayedSpawn(e, startSpawnDelay+96.0, entityFactory.seekingEnemy, new double[] { 1.0, -0.9, -0.15, 0.075, -0.0, -0.0, 0.25, 1.2, 1.0, -0.25, 0.25, 3, 0.025, 120.0, 16 }, 2, 3.0);
-//		new DelayedSpawn(e, startSpawnDelay+96.0, entityFactory.seekingEnemy, new double[] { -1.0, -0.9, 0.15, 0.075, 0.0, 0.0, 0.25, 1.2, 1.0, -0.25, 0.25, 3, 0.025, 120.0, 16 }, 2, 3.0);
-//		new DelayedSpawn(e, startSpawnDelay+98.0, entityFactory.basicEnemy2, new double[] { 1.0, 0.9, -0.4, -0.1, -0.0, -0.0, 0.5, 1.2, 1.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
-//		new DelayedSpawn(e, startSpawnDelay+98.0, entityFactory.basicEnemy2, new double[] { -1.0, 0.9, 0.4, -0.1, 0.0, 0.0, 0.5, 1.2, 1.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
-//		new DelayedSpawn(e, startSpawnDelay+105.0, entityFactory.blackHoleEnemy, new double[] { 1.0, 0.9, -0.4, 0.0, -0.0, -0.0, 0.15, 6.0, 2.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
-//		new DelayedSpawn(e, startSpawnDelay+105.0, entityFactory.blackHoleEnemy, new double[] { -1.0, 0.9, 0.4, 0.0, 0.0, 0.0, 0.15, 6.0, 2.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
-//		new DelayedSpawn(e, startSpawnDelay+105.0, entityFactory.whiteHoleEnemy, new double[] { 1.0, -0.9, -0.4, 0.0, -0.0, -0.0, 0.15, 6.0, 2.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
-//		new DelayedSpawn(e, startSpawnDelay+105.0, entityFactory.whiteHoleEnemy, new double[] { -1.0, -0.9, 0.4, 0.0, 0.0, 0.0, 0.15, 6.0, 2.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
+		new DelayedSpawn(e, startSpawnDelay, entityFactory.basicEnemy, new double[] { rightWallX, 1.1, -0.3, -0.35, -0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
+		new DelayedSpawn(e, startSpawnDelay, entityFactory.basicEnemy, new double[] { -1, 1.1, 0.3, -0.35, 0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
 
-//		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { 0.5, 1.1, 0, -0.7, 0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { -0.5, 1.1, 0, -0.7, -0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { 1.1, 0.5, -0.7, 0, -0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
-//		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { -1.1, 0.5, 0.7, 0, 0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
+		// SUDDEN INTENSITY 
+		new DelayedSpawn(e, startSpawnDelay+10.0, entityFactory.basicEnemy2, new double[] { 0.5, 1.1, 0.0, -1.0, -0.2, 0.0, 0.5, 1.0, 0.0, 0, Math.PI*2.0, 8, 0.005, 10.0, 6 }, 4, 0.75);
+		new DelayedSpawn(e, startSpawnDelay+10.0, entityFactory.basicEnemy2, new double[] { -0.5, 1.1, 0.0, -1.0, 0.2, 0.0, 0.5, 1.0, 0.0, 0, Math.PI*2.0, 8, 0.005, 10.0, 6 }, 4, 0.75);
+
+		new DelayedSpawn(e, startSpawnDelay+15.0, entityFactory.basicEnemy, new double[] { 0.75, 1.1, -0.3, -0.35, -0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
+		new DelayedSpawn(e, startSpawnDelay+15.0, entityFactory.basicEnemy, new double[] { -0.75, 1.1, 0.3, -0.35, 0.1, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 4, 1.5);
+		new DelayedSpawn(e, startSpawnDelay+15.0, entityFactory.basicEnemy, new double[] { 1, -0.8, -0.5, 0.6, -0.15, 0.0, 0.5, 0.9, 1.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 4, 1.5);
+		new DelayedSpawn(e, startSpawnDelay+15.0, entityFactory.basicEnemy, new double[] { -1, -0.8, 0.5, 0.6, 0.15, 0.0, 0.5, 0.9, 1.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 4, 1.5);
+
+		new DelayedSpawn(e, startSpawnDelay+23.0, entityFactory.basicEnemy2, new double[] { 0.75, 1.1, -0.3, -0.35, -0.3, 0.2, 0.5, 1.6, 1.0, -0.25, 0.25, 3, 0.0125, 50.0, 10 }, 4, 1.5);
+		new DelayedSpawn(e, startSpawnDelay+23.0, entityFactory.basicEnemy2, new double[] { -0.75, 1.1, 0.3, -0.35, 0.3, -0.2, 0.5, 1.6, 1.0, -0.25, 0.25, 3, 0.0125, 50.0, 10 }, 4, 1.5);
+		new DelayedSpawn(e, startSpawnDelay+23.0, entityFactory.basicEnemy2, new double[] { 1.1, 0.75, -1.0, 0.0, 0.6, -0.6, 0.75, 1.2, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 6, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+23.0, entityFactory.basicEnemy2, new double[] { -1.1, 0.75, 1.0, 0.0, -0.6, 0.6, 0.75, 1.2, 1.0, -0.25, 0.25, 1, 0.005, 10.0, 4 }, 6, 1.0);
+
+		// INTRO FOR BLACK/WHITE HOLES
+		new DelayedSpawn(e, startSpawnDelay+33.0, entityFactory.blackHoleEnemy, new double[] { 1, -0.5, -0.3, 0.35, -0.1, 0.0, 0.25, 1.3, 1.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 4, 3.0);
+		new DelayedSpawn(e, startSpawnDelay+33.0, entityFactory.whiteHoleEnemy, new double[] { -1, -0.5, 0.3, 0.35, 0.1, 0.0, 0.25, 1.3, 1.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 4, 3.0);
+
+		new DelayedSpawn(e, startSpawnDelay+45.0, entityFactory.blackHoleEnemy, new double[] { 1, -0.25, -0.2, 0.5, 0.24, 0.0, 0.25, 4.0, 2.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 6, 2.0);
+		new DelayedSpawn(e, startSpawnDelay+46.0, entityFactory.whiteHoleEnemy, new double[] { 1, -0.25, -0.2, 0.5, 0.24, 0.0, 0.25, 4.0, 2.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 6, 2.0);
+		new DelayedSpawn(e, startSpawnDelay+45.0, entityFactory.blackHoleEnemy, new double[] { -1, -0.25, 0.2, 0.5, -0.24, 0.0, 0.25, 4.0, 2.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 6, 2.0);
+		new DelayedSpawn(e, startSpawnDelay+46.0, entityFactory.whiteHoleEnemy, new double[] { -1, -0.25, 0.2, 0.5, -0.24, 0.0, 0.25, 4.0, 2.0, 0.0, 0.0, 1, 0.005, 10.0, 4 }, 6, 2.0);
+		new DelayedSpawn(e, startSpawnDelay+45.0, entityFactory.basicEnemy, new double[] { 1, -0.5, -0.3, 0.35, -0.1, 0.0, 0.5, 1.5, 1.0, -0.5, 0.5, 4, 0.005, 10.0, 4 }, 6, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+46.0, entityFactory.basicEnemy, new double[] { -1, -0.5, 0.3, 0.35, 0.1, 0.0, 0.5, 1.5, 1.0, -0.5, 0.5, 4, 0.005, 10.0, 4 }, 6, 1.0);
+
+		new DelayedSpawn(e, startSpawnDelay+59.0, entityFactory.basicEnemy2, new double[] { 1.1, 0.75, -1.0, 0.0, 0.6, -0.0, 0.75, 1.2, 1.0, -0.25, 0.25, 1, 0.005, 20.0, 5 }, 8, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+59.0, entityFactory.basicEnemy2, new double[] { -1.1, 0.75, 1.0, 0.0, -0.6, 0.0, 0.75, 1.2, 1.0, -0.25, 0.25, 1, 0.005, 20.0, 5 }, 8, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+62.0, entityFactory.basicEnemy2, new double[] { 0.9, 1.1, -0.45, -0.45, -0.2, -0.0, 0.5, 1.2, 1.0, -0.25, 0.25, 1, 0.0075, 30.0, 6 }, 8, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+62.0, entityFactory.basicEnemy2, new double[] { -0.9, 1.1, 0.45, -0.45, 0.2, 0.0, 0.5, 1.2, 1.0, -0.25, 0.25, 1, 0.0075, 30.0, 6 }, 8, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+65.0, entityFactory.basicEnemy2, new double[] { 1.0, 0.9, -0.4, -0.0, -0.0, -0.0, 0.25, 1.2, 1.0, -0.4, 0.4, 7, 0.015, 60.0, 8}, 8, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+65.0, entityFactory.basicEnemy2, new double[] { -1.0, 0.9, 0.4, -0.0, 0.0, 0.0, 0.25, 1.2, 1.0, -0.4, 0.4, 7, 0.015, 60.0, 8 }, 8, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+70.0, entityFactory.blackHoleEnemy, new double[] { 1.0, -0.9, -0.4, 0.3, -0.0, -0.0, 0.125, 1.2, 1.0, -0.25, 0.25, 1, 0.015, 60.0, 4 }, 8, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+70.0, entityFactory.whiteHoleEnemy, new double[] { -1.0, -0.9, 0.4, 0.3, 0.0, 0.0, 0.125, 1.2, 1.0, -0.25, 0.25, 1, 0.015, 60.0, 4 }, 8, 1.0);
+
+		new DelayedSpawn(e, startSpawnDelay+84.0, entityFactory.basicEnemy2, new double[] { 1, 0.9, -0.3, -0.1, -0.04, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 35.0, 7 }, 8, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+84.0, entityFactory.basicEnemy2, new double[] { -1, 0.9, 0.3, -0.1, 0.04, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 35.0, 7 }, 8, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+84.0, entityFactory.basicEnemy2, new double[] { 1, 0.7, -0.3, 0.1, 0.04, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 35.0, 7 }, 8, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+84.0, entityFactory.basicEnemy2, new double[] { -1, 0.7, 0.3, 0.1, -0.04, 0.0, 0.5, 1.6, 1.0, -0.25, 0.25, 1, 0.005, 35.0, 7 }, 8, 1.0);
+
+		new DelayedSpawn(e, startSpawnDelay+83.0, entityFactory.seekingEnemy, new double[] { 1.0, 0.9, -0.15, 0.075, -0.0, -0.0, 0.38, 2.0, 1.0, -0.35, 0.35, 3, 0.025, 120.0, 16 }, 1, 3.0);
+		new DelayedSpawn(e, startSpawnDelay+83.0, entityFactory.seekingEnemy, new double[] { -1.0, 0.9, 0.15, 0.075, 0.0, 0.0, 0.38, 2.0, 1.0, -0.35, 0.35, 3, 0.025, 120.0, 16 }, 1, 3.0);
+		new DelayedSpawn(e, startSpawnDelay+86.0, entityFactory.seekingEnemy, new double[] { 1.0, 0.4, -0.15, 0.075, -0.0, -0.0, 0.38, 2.0, 1.0, -0.35, 0.35, 3, 0.025, 120.0, 16 }, 1, 3.0);
+		new DelayedSpawn(e, startSpawnDelay+86.0, entityFactory.seekingEnemy, new double[] { -1.0, 0.4, 0.15, 0.075, 0.0, 0.0, 0.38, 2.0, 1.0, -0.35, 0.35, 3, 0.025, 120.0, 16 }, 1, 3.0);
+
+		new DelayedSpawn(e, startSpawnDelay+96.0, entityFactory.seekingEnemy, new double[] { 1.0, -0.9, -0.15, 0.075, -0.0, -0.0, 0.25, 1.2, 1.0, -0.25, 0.25, 3, 0.025, 120.0, 16 }, 2, 3.0);
+		new DelayedSpawn(e, startSpawnDelay+96.0, entityFactory.seekingEnemy, new double[] { -1.0, -0.9, 0.15, 0.075, 0.0, 0.0, 0.25, 1.2, 1.0, -0.25, 0.25, 3, 0.025, 120.0, 16 }, 2, 3.0);
+		new DelayedSpawn(e, startSpawnDelay+98.0, entityFactory.basicEnemy2, new double[] { 1.0, 0.9, -0.4, -0.1, -0.0, -0.0, 0.5, 1.2, 1.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
+		new DelayedSpawn(e, startSpawnDelay+98.0, entityFactory.basicEnemy2, new double[] { -1.0, 0.9, 0.4, -0.1, 0.0, 0.0, 0.5, 1.2, 1.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
+		new DelayedSpawn(e, startSpawnDelay+105.0, entityFactory.blackHoleEnemy, new double[] { 1.0, 0.9, -0.4, 0.0, -0.0, -0.0, 0.15, 6.0, 2.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
+		new DelayedSpawn(e, startSpawnDelay+105.0, entityFactory.blackHoleEnemy, new double[] { -1.0, 0.9, 0.4, 0.0, 0.0, 0.0, 0.15, 6.0, 2.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
+		new DelayedSpawn(e, startSpawnDelay+105.0, entityFactory.whiteHoleEnemy, new double[] { 1.0, -0.9, -0.4, 0.0, -0.0, -0.0, 0.15, 6.0, 2.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
+		new DelayedSpawn(e, startSpawnDelay+105.0, entityFactory.whiteHoleEnemy, new double[] { -1.0, -0.9, 0.4, 0.0, 0.0, 0.0, 0.15, 6.0, 2.0, -0.25, 0.25, 1, 0.0075, 25.0, 5 }, 12, 0.75);
+
+		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { 0.5, 1.1, 0, -0.7, 0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { -0.5, 1.1, 0, -0.7, -0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { 1.1, 0.5, -0.7, 0, -0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
+		new DelayedSpawn(e, startSpawnDelay+120.0, entityFactory.basicEnemy2, new double[] { -1.1, 0.5, 0.7, 0, 0.15, 0.0, 0.75, 1.2, 1.0, 0.0, Math.PI*2.0, 10, 0.005, 15.0, 50 }, 8, 1.0);
 
 		new DelayedSpawn(e, startSpawnDelay+135.0, entityFactory.boss, new double[] {}, 1, 0.0);
 
@@ -248,17 +248,22 @@ public class TestScene extends Scene {
 
 	@Override
 	public boolean update(double delta) {
-		if(collectables.getLives() > 0) {
+		if(collectables.getLives() > 0 && gameWonCountDown > 0.0) {
 			super.updateRange(delta, new AABB(-5, -5, 5, 5));
 			starsDelta += delta;
 			oldScreenLighting = screenLighting;
 		} else {
 			screenLighting = 0.25;
+			collectables.multiplyScreenShake(0.00, 1.0);
 			if(continueButton.isDown()) {
 				collectables.reset();
 				screenLighting = oldScreenLighting;
 				numContinuesUsed++;
 			}
+		}
+
+		if(isGameWon) {
+			gameWonCountDown -= delta;
 		}
 		return false;
 	}
@@ -267,6 +272,8 @@ public class TestScene extends Scene {
 	private Stars3D stars = new Stars3D(800, 1.0, 1.0, 0.50, 0.0);
 	private Color starColor = new Color(0.4f, 0.4f, 1.0f);
 	public static double screenLighting = 1.0;
+	public static boolean isGameWon = false;
+	private static double gameWonCountDown = 3.0;
 	private int numContinuesUsed = 0;
 
 	@Override
@@ -305,8 +312,12 @@ public class TestScene extends Scene {
 			y = target.drawString("", font, -0.5, y, 0.075, Color.WHITE, 1.0);
 			y = target.drawString("Continues used: " + numContinuesUsed, font, -0.44, y, 0.075,
 				Color.WHITE, 1.0);
-
-
+		} else if(gameWonCountDown <= 0.0) {
+			y = 0;
+			y = target.drawString("You Won!", font, -0.5, y, 0.15,
+				Color.WHITE, 1.0);
+			y = target.drawString("The evil behemoth known only as 'The frickin blob' has finally been subdued", font, -1.0, y, 0.075,
+				Color.WHITE, 1.0);
 		}
 
 		target.cleanupResources();	

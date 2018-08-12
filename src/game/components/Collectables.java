@@ -54,7 +54,7 @@ public class Collectables {
 	private int initialLives;
 
 	public Collectables() {
-		this(99.9, 4.5, 5);
+		this(99.9, 1.0, 5);
 	}
 	
 	public Collectables(double maxPower, double initialPower, int numStartingLives) {
@@ -69,7 +69,7 @@ public class Collectables {
 
 	public void reset() {
 		this.maxPower = this.initialMaxPower;
-		this.power = this.initialPower;
+//		this.power = this.initialPower;
 		this.lives = this.initialLives;
 		this.score = 0;
 	}

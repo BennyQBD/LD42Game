@@ -358,63 +358,141 @@ public class EntityFactory {
 					new SpriteComponent(e, 0.3, 0.3, bossSheet, 4, Color.WHITE);
 				}
 			};
-			
-			Entity e = new Entity(spatialStructure, bossLocX, bossLocY, 0);
-			baseBossEntity.addToEntity(e);
-			new BulletSpawnerAimer(e, player);
-			circle5.addToEntity(e);
-			circle6.addToEntity(e);
-			circle7.addToEntity(e);
-			circle8.addToEntity(e);
-			circle9.addToEntity(e);
-			new RandomAreaMovement(e, 0.6, new AABB(-1.0, 0.2, 1.0, 1.0));
-			new EnemyComponent(e, collectables, 3000.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, new IEntityMaker() {
+
+			IEntityMaker finalPhaseMaker = new IEntityMaker() {
 				@Override
 				public Entity makeEntity(Entity entity, double[] params) {
 					Entity e = new Entity(spatialStructure, entity.getX(), entity.getY(), 0);
+					baseBossEntity.addToEntity(e);
+					new BulletSpawnerAimer(e, player);
+					new RandomAreaMovement(e, 0.6, new AABB(-1.0, 0.2, 1.0, 1.0));
+					circle5.addToEntity(e);	
+					for(int i = 0; i < numCollectablesPerPhase; i++) {
+						collectableSpawner2.makeEntity(e, params);
+					}
+					new EnemyComponent(e, collectables, 2250.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, new IEntityMaker() {
+						@Override
+						public Entity makeEntity(Entity entity, double[] params) {
+							Entity e = new Entity(spatialStructure, entity.getX(), entity.getY(), 0);
+							baseBossEntity.addToEntity(e);
+							new BulletSpawnerAimer(e, player);
+							new RandomAreaMovement(e, 0.6, new AABB(-1.0, 0.2, 1.0, 1.0));
+							circle5.addToEntity(e);
+							circle6.addToEntity(e);
+							for(int i = 0; i < numCollectablesPerPhase; i++) {
+								collectableSpawner2.makeEntity(e, params);
+							}
+							new EnemyComponent(e, collectables, 1900.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, new IEntityMaker() {
+								@Override
+								public Entity makeEntity(Entity entity, double[] params) {
+									Entity e = new Entity(spatialStructure, entity.getX(), entity.getY(), 0);
+									baseBossEntity.addToEntity(e);
+									new BulletSpawnerAimer(e, player);
+									new RandomAreaMovement(e, 0.6, new AABB(-1.0, 0.2, 1.0, 1.0));
+									circle5.addToEntity(e);
+									circle6.addToEntity(e);
+									circle8.addToEntity(e);
+									for(int i = 0; i < numCollectablesPerPhase; i++) {
+										collectableSpawner2.makeEntity(e, params);
+									}
+									new EnemyComponent(e, collectables, 1750.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, new IEntityMaker() {
+										@Override
+										public Entity makeEntity(Entity entity, double[] params) {
+											Entity e = new Entity(spatialStructure, entity.getX(), entity.getY(), 0);
+											baseBossEntity.addToEntity(e);
+											new BulletSpawnerAimer(e, player);
+											new RandomAreaMovement(e, 0.6, new AABB(-1.0, 0.2, 1.0, 1.0));
+											circle5.addToEntity(e);
+											circle6.addToEntity(e);
+											circle8.addToEntity(e);
+											circle7.addToEntity(e);
+											for(int i = 0; i < numCollectablesPerPhase; i++) {
+												collectableSpawner2.makeEntity(e, params);
+											}
+											new EnemyComponent(e, collectables, 1600.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, new IEntityMaker() {
+												@Override
+												public Entity makeEntity(Entity entity, double[] params) {
+													Entity e = new Entity(spatialStructure, entity.getX(), entity.getY(), 0);
+													baseBossEntity.addToEntity(e);
+													new BulletSpawnerAimer(e, player);
+													new RandomAreaMovement(e, 0.6, new AABB(-1.0, 0.2, 1.0, 1.0));
+													circle5.addToEntity(e);
+													circle6.addToEntity(e);
+													circle8.addToEntity(e);
+													circle7.addToEntity(e);
+													circle9.addToEntity(e);
+													for(int i = 0; i < numCollectablesPerPhase; i++) {
+														collectableSpawner2.makeEntity(e, params);
+													}
+													new EnemyComponent(e, collectables, 1400.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, new IEntityMaker() {
+														@Override
+														public Entity makeEntity(Entity entity, double[] params) {
+															Entity e = new Entity(spatialStructure, entity.getX(), entity.getY(), 0);
+															for(int i = 0; i < numCollectablesPerPhase; i++) {
+																collectableSpawner2.makeEntity(e, params);
+															}
+															TestScene.isGameWon = true;
+															return e;
+														}
+													}, new double[] {0.01, 0.02, 10.0}, 1, null);
+													return e;
+												}
+											}, new double[] {0.01, 0.02, 9.0}, 1, null);
+											return e;
+										}
+									}, new double[] {0.01, 0.02, 8.0}, 1, null);
+									return e;
+								}
+							}, new double[] {0.01, 0.02, 7.0}, 1, null);
+							return e;
+						}
+					}, new double[] {0.01, 0.02, 6.0}, 1, null);
 					return e;
 				}
-			}, new double[] {0.01, 0.02}, 1, null);
-//			circle1.addToEntity(e);
-//			new RandomAreaMovement(e, 0.3, new AABB(-1.0, 0.2, 1.0, 1.0));
-//			new EnemyComponent(e, collectables, 3000.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, new IEntityMaker() {
-//				@Override
-//				public Entity makeEntity(Entity entity, double[] params) {
-//					Entity e = new Entity(spatialStructure, bossLocX, bossLocY, 0);
-//					baseBossEntity.addToEntity(e);
-//					fourLeafClover.addToEntity(e);
-//					for(int i = 0; i < numCollectablesPerPhase; i++) {
-//						collectableSpawner.makeEntity(e, params);
-//					}
-//					new EnemyComponent(e, collectables, 5000.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, new IEntityMaker() {
-//						@Override
-//						public Entity makeEntity(Entity entity, double[] params) {
-//							Entity e = new Entity(spatialStructure, entity.getX(), entity.getY(), 0);
-//							baseBossEntity.addToEntity(e);
-//							circle3.addToEntity(e);
-//							for(int i = 0; i < numCollectablesPerPhase; i++) {
-//								collectableSpawner.makeEntity(e, params);
-//							}
-//							new EnemyComponent(e, collectables, 7500.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, new IEntityMaker() {
-//								@Override
-//								public Entity makeEntity(Entity entity, double[] params) {
-//									Entity e = new Entity(spatialStructure, entity.getX(), entity.getY(), 0);
-//									new RandomAreaMovement(e, 0.3, new AABB(-1.0, 0.2, 1.0, 1.0));
-//									baseBossEntity.addToEntity(e);
-//									circle4.addToEntity(e);
-//									for(int i = 0; i < numCollectablesPerPhase; i++) {
-//										collectableSpawner.makeEntity(e, params);
-//									}
-//									new EnemyComponent(e, collectables, 3500.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, collectableSpawner, new double[] {0.01, 0.02}, 100, null);
-//									return e;
-//								}
-//							}, new double[] {0.01, 0.02}, 1, null);
-//							return e;
-//						}
-//					}, new double[] {0.01, 0.02}, 1, null);
-//					return e;
-//				}
-//			}, new double[] {0.01, 0.02}, 1, null);
+			};
+			
+			Entity e = new Entity(spatialStructure, bossLocX, bossLocY, 0);
+			baseBossEntity.addToEntity(e);
+			circle1.addToEntity(e);
+			new RandomAreaMovement(e, 0.3, new AABB(-1.0, 0.2, 1.0, 1.0));
+			new EnemyComponent(e, collectables, 3000.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, new IEntityMaker() {
+				@Override
+				public Entity makeEntity(Entity entity, double[] params) {
+					Entity e = new Entity(spatialStructure, bossLocX, bossLocY, 0);
+					baseBossEntity.addToEntity(e);
+					fourLeafClover.addToEntity(e);
+					for(int i = 0; i < numCollectablesPerPhase; i++) {
+						collectableSpawner2.makeEntity(e, params);
+					}
+					new EnemyComponent(e, collectables, 5000.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, new IEntityMaker() {
+						@Override
+						public Entity makeEntity(Entity entity, double[] params) {
+							Entity e = new Entity(spatialStructure, entity.getX(), entity.getY(), 0);
+							baseBossEntity.addToEntity(e);
+							circle3.addToEntity(e);
+							for(int i = 0; i < numCollectablesPerPhase; i++) {
+								collectableSpawner2.makeEntity(e, params);
+							}
+							new EnemyComponent(e, collectables, 7500.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, new IEntityMaker() {
+								@Override
+								public Entity makeEntity(Entity entity, double[] params) {
+									Entity e = new Entity(spatialStructure, entity.getX(), entity.getY(), 0);
+									new RandomAreaMovement(e, 0.3, new AABB(-1.0, 0.2, 1.0, 1.0));
+									baseBossEntity.addToEntity(e);
+									circle4.addToEntity(e);
+									for(int i = 0; i < numCollectablesPerPhase; i++) {
+										collectableSpawner2.makeEntity(e, params);
+									}
+									new EnemyComponent(e, collectables, 3500.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, finalPhaseMaker, new double[] {0.01, 0.02}, 1, null);
+									return e;
+								}
+							}, new double[] {0.01, 0.02, 5.0}, 1, null);
+							return e;
+						}
+					}, new double[] {0.01, 0.02, 3.0}, 1, null);
+					return e;
+				}
+			}, new double[] {0.01, 0.02, 2.0}, 1, null);
 			return e;
 		}
 	};
@@ -527,6 +605,21 @@ public class EntityFactory {
 				return e;
 			}
 		};
+
+	public final IEntityMaker collectableSpawner2 = new IEntityMaker() {
+			@Override
+			// Params: minScale, maxScale
+			public Entity makeEntity(Entity entity, double[] params) {
+				Entity e = new Entity(spatialStructure, entity.getX(), entity.getY(), 0);
+				new ProjectileComponent(e, CMWC4096.random(-0.2, 0.2), CMWC4096.random(0.1, 0.3), 0, -0.4, 0, 0, 0.5, 2.0, screenArea);
+				double scale = CMWC4096.random(params[0], params[1]);
+				new SpriteComponent(e, scale, scale, primarySheet, 7, Color.WHITE);
+				new CollectableComponent(e, 0, scale*params[2]);
+				new HittableComponent(e, HittableComponent.TYPE_COLLECTABLE);
+				return e;
+			}
+		};
+
 
 
 	public final IEntityComponentAdder standardBullet = new IEntityComponentAdder() {
