@@ -74,6 +74,8 @@ public class InventoryComponent extends EntityComponent {
 	private double maxFireSpeed = 1.0/60.0;
 	private static AudioUtilClip bombSound = null;
 	private static AudioUtilClip shootSound = null;
+	private static AudioUtilClip deathSound = null;
+	private static AudioUtilClip itemPickup = null;
 
 	private ColliderComponent getColliderComponent() {
 		if (colliderComponent != null) {
@@ -105,10 +107,16 @@ public class InventoryComponent extends EntityComponent {
 		this.minPowerToDecayTo = minPowerToDecayTo;
 		this.powerSpeedUpFactor = Math.exp(Math.log(maxFireSpeed/fireSpeed)/(collectables.getMaxPower()-4.0));
 		if(bombSound == null) {
-			this.bombSound = AudioUtil.loadClip("./res/bomb.wav");
+			this.bombSound = AudioUtil.loadClip("./res/Explosion27.wav");
 		}
 		if(shootSound == null) {
-			this.shootSound = AudioUtil.loadClip("./res/shoot.wav");
+			this.shootSound = AudioUtil.loadClip("./res/Laser_Shoot39.wav");
+		}
+		if(deathSound == null) {
+			this.deathSound = AudioUtil.loadClip("./res/Randomize28.wav");
+		}
+		if(itemPickup == null) {
+			this.itemPickup = AudioUtil.loadClip("./res/Explosion55.wav");
 		}
 	}
 
@@ -252,6 +260,7 @@ public class InventoryComponent extends EntityComponent {
 		getEntity().setY(startPosY);
 		setInvulnerabilityTime(invulnerabilityTimeAfterHit);
 		isHit = false;
+		deathSound.play();
 		collectables.addLives(-1);
 	}
 
@@ -274,6 +283,7 @@ public class InventoryComponent extends EntityComponent {
 			CollectableComponent collectable = (CollectableComponent)c.getEntity().getComponent(CollectableComponent.ID);
 			addPoints(collectable.getPoints());
 			addPower(collectable.getPower());
+			itemPickup.play();
 			entity.remove();
 		}
 	}

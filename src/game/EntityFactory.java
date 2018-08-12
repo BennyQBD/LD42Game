@@ -483,10 +483,10 @@ public class EntityFactory {
 									for(int i = 0; i < numCollectablesPerPhase; i++) {
 										collectableSpawner2.makeEntity(e, params);
 									}
-									new EnemyComponent(e, collectables, 3500.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, finalPhaseMaker, new double[] {0.01, 0.02}, 1, null);
+									new EnemyComponent(e, collectables, 3500.0, 0.1, new int[] {HittableComponent.TYPE_ENEMY_HAZARD}, finalPhaseMaker, new double[] {0.01, 0.02, 5.0}, 1, null);
 									return e;
 								}
-							}, new double[] {0.01, 0.02, 5.0}, 1, null);
+							}, new double[] {0.01, 0.02, 4.0}, 1, null);
 							return e;
 						}
 					}, new double[] {0.01, 0.02, 3.0}, 1, null);

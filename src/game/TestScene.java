@@ -318,7 +318,7 @@ public class TestScene extends Scene {
 					Color.WHITE, 1.0);
 	//		y = target.drawString(""+collectables.getScore(), font, 0.3, y, 0.075,
 	//				Color.WHITE, 1.0);
-			target.drawString("Entropy: " + collectables.getPower(), font, 0.18, y, 0.075,
+			target.drawString("Entropy: " + collectables.getPower(), font, 0.1, y, 0.075,
 					Color.WHITE, 1.0);
 			target.drawString("Lives: " + collectables.getLives(), font, -1, -1, 0.075,
 					Color.WHITE, 1.0);

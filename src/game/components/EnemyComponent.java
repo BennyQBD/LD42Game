@@ -6,6 +6,8 @@ import java.util.Random;
 import java.util.List;
 
 import engine.audio.IAudioDevice;
+import engine.audio.AudioUtilClip;
+import engine.audio.AudioUtil;
 import engine.components.ColliderComponent;
 import engine.components.CollisionComponent;
 import engine.components.LightComponent;
@@ -56,6 +58,9 @@ public class EnemyComponent extends EntityComponent {
 	private int[] hittableComponentTypes;
 	private List<Entity> bulletMoveLocations;
 	private boolean isDead = false;
+	private static AudioUtilClip deathSound1 = null;
+	private static AudioUtilClip deathSound2 = null;
+	private static AudioUtilClip deathSound3 = null;
 
 	private ColliderComponent getColliderComponent() {
 		if (colliderComponent != null) {
@@ -79,6 +84,15 @@ public class EnemyComponent extends EntityComponent {
 		this.screenShakeAmount = screenShakeAmount;
 		this.hittableComponentTypes = hittableComponentTypes;
 		this.bulletMoveLocations = bulletMoveLocations;
+		if(deathSound1 == null) {
+			this.deathSound1 = AudioUtil.loadClip("./res/Explosion6.wav");
+		}
+		if(deathSound2 == null) {
+			this.deathSound2 = AudioUtil.loadClip("./res/Explosion28.wav");
+		}
+		if(deathSound3 == null) {
+			this.deathSound3 = AudioUtil.loadClip("./res/Explosion42.wav");
+		}
 	}
 
 	@Override
@@ -121,6 +135,16 @@ public class EnemyComponent extends EntityComponent {
 	private void damage(double amt) {
 		health -= amt;
 		if(health <= 0 && !isDead) {
+			double soundRand = CMWC4096.random();
+			if(soundRand > 0.333333333) {
+				if(soundRand > 0.6666666666) {
+					deathSound1.play();
+				} else {
+					deathSound3.play();
+				}
+			} else {
+				deathSound2.play();
+			}
 			collectables.addScreenShake(screenShakeAmount);
 			collectables.addScore((long)(initialHealth*10));
 			if(spawnOnDeath != null) {
