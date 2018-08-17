@@ -2,7 +2,6 @@ package engine.audio;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -11,6 +10,7 @@ import javax.sound.sampled.DataLine.Info;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
  
 import static javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
 
@@ -44,28 +44,30 @@ public class AudioUtil {
 		}
 		@Override
 		public void run() {
-			try (final AudioInputStream in = AudioSystem.getAudioInputStream(file)) {
-				final AudioFormat outFormat = getOutFormat(in.getFormat());
-				final Info info = new Info(SourceDataLine.class, outFormat);
-	 
-				try (final SourceDataLine line =
-						 (SourceDataLine) AudioSystem.getLine(info)) {
-					if (line != null) {
-						in.mark(Integer.MAX_VALUE);
-						line.open(outFormat, 2048);
-						line.start();
-						while(isRunning) {
-							stream(AudioSystem.getAudioInputStream(outFormat, in), line);
-							line.drain();
-							in.reset();
+			while(isRunning) {
+				try (AudioInputStream in = AudioSystem.getAudioInputStream(file)) {
+					final AudioFormat outFormat = getOutFormat(in.getFormat());
+					final Info info = new Info(SourceDataLine.class, outFormat);
+		 
+					try (final SourceDataLine line =
+							 (SourceDataLine) AudioSystem.getLine(info)) {
+						if (line != null) {
+//							in.mark(Integer.MAX_VALUE);
+							line.open(outFormat, 2048);
+							line.start();
+//							while(isRunning) { // More efficient way to repeat if markers are supported
+								stream(AudioSystem.getAudioInputStream(outFormat, in), line);
+								line.drain();
+//								in.reset();
+//							}
+							line.stop();
 						}
-						line.stop();
 					}
+				} catch (UnsupportedAudioFileException 
+					   | LineUnavailableException 
+					   | IOException e) {
+					throw new IllegalStateException(e);
 				}
-			} catch (UnsupportedAudioFileException 
-				   | LineUnavailableException 
-				   | IOException e) {
-				throw new IllegalStateException(e);
 			}
 		}
 	}
@@ -88,7 +90,7 @@ public class AudioUtil {
 	}
 
 	public static AudioUtilClip loadClip(String fileName) {
-		return loadClip(fileName, 0.0f);
+		return loadClip(fileName, -6.0f);
 	}
 	public static AudioUtilClip loadClip(String fileName, float volumeDB) {
 		try {

@@ -156,7 +156,7 @@ public class EntityFactory {
 	//				return e;
 					new ClearHittableOnRemove(e, new AABB(-2,-2,2,2), HittableComponent.TYPE_HAZARD);
 					BulletSpawnVariance var = new BulletSpawnVariance(0,0,0,0,0,0,0,0);
-					double spawnSpeed = 0.075;
+					double spawnSpeed = 0.11;
 					double speed = 0.4;
 					double speed2 = 0.4;
 					double sqrt2o2 = Math.sqrt(speed*speed*2);//Math.sqrt(2.0)/2.0;

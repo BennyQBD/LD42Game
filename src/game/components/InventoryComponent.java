@@ -183,6 +183,9 @@ public class InventoryComponent extends EntityComponent {
 	}
 
 	private void handleBombs() {
+		if(invulnerabilityTimer > 0) {
+			return;
+		}
 		if(bombButton.isDown() && !buttonWasDown) {
 			bomb(0.75);
 		}

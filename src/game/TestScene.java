@@ -220,6 +220,8 @@ public class TestScene extends Scene {
 
 //		entityFactory.makeBossEntity(screenCenterX, entityFactory.bossBullet);
 //		AudioUtil.playBackgroundMusic("./res/music.mp3");
+		AudioUtil.playBackgroundMusic("./res/title.ogg");
+
 	}
 
 	private ColliderComponent makeColliderAndCollision(Entity e) {
@@ -250,6 +252,7 @@ public class TestScene extends Scene {
 	double starsDelta = 0.0;
 	double starsDelta2 = 0.0;
 	private double oldScreenLighting = 1.0;
+	private boolean gameWonCounterLess = false;
 
 	@Override
 	public boolean update(double delta) {
@@ -270,11 +273,16 @@ public class TestScene extends Scene {
 
 			if(isGameWon) {
 				gameWonCountDown -= delta;
+				if(!gameWonCounterLess && gameWonCountDown <= 0) {
+					gameWonCounterLess = true;
+					AudioUtil.playBackgroundMusic("./res/victory.ogg");
+				}
 			}
 		} else {
 			starsDelta2 += delta;
 			if(startGameButton.isDown()) {
 				isGameStarted = true;
+				AudioUtil.playBackgroundMusic("./res/level.ogg");
 			}
 		}
 		return false;
@@ -338,8 +346,21 @@ public class TestScene extends Scene {
 				y = 0;
 				y = target.drawString("You Won!", font, -0.5, y, 0.15,
 					Color.WHITE, 1.0);
-				y = target.drawString("The evil behemoth known only as 'The frickin blob' has finally been subdued. Congratulation! A winner is you!", font, -1.0, y, 0.075,
-					Color.WHITE, 1.0);
+				double x = -0.95;
+				if(numContinuesUsed == 0) {
+					y = target.drawString("And you did it without using any continues!", font, x, y, 0.075,
+						Color.WHITE, 1.0);
+					y = target.drawString("The evil behemoth known only as 'The frickin blob' has finally been subdued. Congratulation! A winner is you!", font, x, y, 0.075,
+						Color.WHITE, 1.0);
+				} else {
+					String continueText = numContinuesUsed == 1 ? "continue" : "continues";
+					y = target.drawString("And you only used " + numContinuesUsed + " " + continueText +"!", font, x, y, 0.075,
+						Color.WHITE, 1.0);
+					y = target.drawString("Peace is restored for now... but evil may one day return!", font, x, y, 0.075,
+						Color.WHITE, 1.0);
+					y = target.drawString("Try winning without using any continues!", font, x, y, 0.075,
+						Color.WHITE, 1.0);
+				}
 			}
 		} else {
 			thunderCloud.updateAndRender(target, (float)starsDelta2, primarySheet, 0, 0.1, 0.1, 0.1, new Color(0.5f, 0.5f, 1.0f), 0.02, 0, -0.02, (float)0.0f, (float)0.0f, true, true, true);
